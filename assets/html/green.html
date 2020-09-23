@@ -1,0 +1,48 @@
+<html>
+	<head>
+		<title>Basic Scene (Green)</title>
+		<style>
+			body { margin: 0; }
+			canvas { display: block; }
+		</style>
+	</head>
+	<body>
+        <script src="dist://js/three.js"></script>
+        <script src="dist://lib.js"></script>
+        <script>
+            const color = 0x00FF00;
+            const
+                w = window.innerWidth,
+                h = window.innerHeight
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, w / h, 0.1, 1000);
+
+            const renderer = new THREE.WebGLRenderer();
+            renderer.setSize(w, h);
+            document.body.appendChild(renderer.domElement);
+
+            const geometry = new THREE.BoxGeometry();
+            const material = new THREE.MeshBasicMaterial({ color });
+            const cube = new THREE.Mesh(geometry, material);
+            scene.add(cube);
+
+            camera.position.z = 5;
+
+            document.body.appendChild(VRButton.createButton(renderer));
+            renderer.xr.enabled = true;
+
+            renderer.setAnimationLoop(function () {
+
+                cube.rotation.x += 0.01;
+                cube.rotation.y += 0.01;
+                renderer.render(scene, camera);
+
+            });
+
+            autoResize(renderer, camera);
+            autoVRButton(renderer);
+            autoExpose('boxColor', cube.material.color, cube.material.color.getHex);
+        </script>
+	</body>
+</html>

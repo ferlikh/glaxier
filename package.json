@@ -1,0 +1,33 @@
+{
+  "name": "glaxier",
+  "version": "1.0.0",
+  "description": "WebGL Augmented-eXtended Integrated Environment REPL",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --mode development",
+    "watch": "webpack -w --mode development",
+    "start": "npm run build && node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "webgl",
+    "node",
+    "repl",
+    "ar",
+    "xr"
+  ],
+  "author": "Fred Erlikh",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^10.1.2",
+    "three": "^0.120.1"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^6.1.1",
+    "ts-loader": "^8.0.4",
+    "typescript": "^4.0.3",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  }
+}
