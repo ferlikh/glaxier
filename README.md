@@ -41,6 +41,7 @@ npm install
 npm start
 ```
 
+<br />
 
 
 <!-- USAGE EXAMPLES -->
@@ -55,20 +56,23 @@ Then, in another terminal, run:
 node index.js
 ```
 
-Now you should see something like this:
+Now you should see something like:
 ```
 glxr>
 ```
 
-<br />
-
 Now try running a scene:
 ```
-render('cube') // try render('sphere')
+render('cube') // or render('sphere')
 ```
+![alt text](https://github.com/fredism/glaxier/blob/master/assets/img/cube.png?raw=true)
 
 
 Scenes can also be composed:
 ```
 compose('cube', 'sphere')
 ```
+![alt text](https://github.com/fredism/glaxier/blob/master/assets/img/composed.png?raw=true)
+
+<br />
+Give it a try!
