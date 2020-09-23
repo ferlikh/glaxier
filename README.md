@@ -38,7 +38,6 @@ npm install npm@latest -g
 git clone https://github.com/fredism/glaxier
 cd glaxier
 npm install
-npm start
 ```
 
 <br />
