@@ -18,6 +18,45 @@ module.exports = [
                 'glaxier$': path.resolve(__dirname, 'lib', 'index.ts'),
             }
         },
+        entry: path.resolve('./lib'),
+        target: 'node',
+        node: {
+            __dirname: true,
+            __filename: false
+        },
+        module: {
+            rules: [
+                {
+                    test: /\.(ts|tsx)$/,
+                    include: [path.resolve('./lib')],
+                    use: {
+                        loader: 'ts-loader',
+                        options: {
+                            configFile: "tsconfig.lib.json"
+                        }
+                    },
+                },
+            ],
+        },
+        externals: {
+            'glaxier': 'commonjs ./lib',
+        },
+        output: {
+            path: path.resolve('dist/bundles'),
+            filename: 'index.js',
+            libraryTarget: 'commonjs',
+            globalObject: 'this'
+        },
+    },
+    {
+        resolve: {
+            extensions: ['.ts', '.tsx', '.js'],
+            modules: ['node_modules'],
+            alias: {
+                'glaxier': path.resolve(__dirname, 'lib'),
+                'glaxier$': path.resolve(__dirname, 'lib', 'index.ts'),
+            }
+        },
         devtool: 'source-map',
         entry: {
             lib: path.resolve('./lib'),

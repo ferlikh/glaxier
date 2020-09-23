@@ -1,8 +1,13 @@
 {
   "name": "glaxier",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "WebGL Augmented-eXtended Integrated Environment REPL",
-  "main": "index.js",
+  "main": "dist/bundles/index.js",
+  "types": "dist/typings/index.d.js",
+  "files": [
+    "dist/bundles",
+    "dist/typings"
+  ],
   "scripts": {
     "build": "webpack --mode development",
     "watch": "webpack -w --mode development",
@@ -29,5 +34,9 @@
     "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fredism/glaxier.git"
   }
 }
