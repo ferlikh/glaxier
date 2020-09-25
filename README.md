@@ -39,10 +39,6 @@ git clone https://github.com/fredism/glaxier
 cd glaxier
 npm install
 ```
-
-<br />
-
-
 <!-- USAGE EXAMPLES -->
 ## Usage
 Best way is running a watcher.
