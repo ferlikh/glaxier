@@ -22,11 +22,11 @@ export function render() {
 
     return {
         camera, 
-        meshes: [ line ],
+        objects: [ line ],
         setup: function() {
             console.log('sphere setup')
             this.camera.position.z = 5;
-            autoResize(this.renderer, this.camera);
+            autoResize(this);
             autoVRButton(this.renderer);
             autoExpose('color', sphere.material.color, sphere.material.color.getStyle);
             autoExpose('rotationSpeed', speed => rotationSpeed = speed, rotationSpeed);

@@ -14,11 +14,11 @@ export function render() {
     const cube = mesh(geometry, material);
     return {
         camera, 
-        meshes:[ cube ],
+        objects: [ cube ],
         setup: function() {
             console.log('cube setup');
             this.camera.position.z = 5;
-            autoResize(this.renderer, this.camera);
+            autoResize(this);
             autoVRButton(this.renderer);
             autoExpose('color', cube.material.color, cube.material.color.getStyle);
             autoExpose('rotationSpeed', speed => rotationSpeed = speed, rotationSpeed);

@@ -1,10 +1,11 @@
 import path from 'path';
-import { Utils } from 'glaxier/util';
+import { EffectComposer, Pass, RenderPass, Utils } from 'glaxier';
 import * as THREE from 'three';
 
 export interface SceneOptions {
     camera: THREE.Camera;
-    meshes: THREE.Mesh[];
+    effects?: Pass[];
+    objects: THREE.Object3D[];
     renderer?: THREE.Renderer;
     loop?: Function;
     setup?: Function;
@@ -12,40 +13,60 @@ export interface SceneOptions {
 }
 
 export class Scene {
-    // readonly __scn__ = true;
     readonly __scn__ = Scenes.sceneKey;
-    protected readonly renderer: THREE.Renderer;
-    protected readonly scene: THREE.Scene;
-    public readonly camera: THREE.Camera;
-    public readonly meshes: THREE.Mesh[];
-    public readonly loop: Function;
-    public readonly setup: Function;
+    readonly composer: EffectComposer;
+    readonly renderer: THREE.Renderer;
+    readonly scene: THREE.Scene;
+    readonly camera: THREE.Camera;
+    readonly effects: Pass[];
+    readonly objects: THREE.Object3D[];
+    readonly loop: Function;
+    readonly setup: Function;
+
     private _attached: boolean;
     get attached() { return this._attached };
-    constructor(public readonly options: SceneOptions) {
-        this.scene = new THREE.Scene;
-        if (options.renderer) {
-            this.renderer = options.renderer;
+    get lights() {
+        return this.objects.filter(o => o.type.includes('Light'));
+    }
+    get meshes() {
+        return this.objects.filter(o => o.type.includes('Mesh'));
+    }
+
+    constructor(readonly options: SceneOptions) {
+        const scene = this.scene = new THREE.Scene;
+        const { renderer, camera, objects, effects, setup, loop, attached } = options;
+
+        if (renderer) {
+            this.renderer = renderer;
         }
         else {
             this.renderer = new THREE.WebGLRenderer;
             this.renderer.setSize(window.innerWidth, window.innerHeight);
         }
-        this.camera = options.camera;
-        this.meshes = options.meshes ?? [];
-        this.scene.add(...this.meshes);
+        this.camera = camera;
+        this.objects = objects ?? [];
+
+        if(this.objects.length) this.scene.add(...this.objects);
+
+        if(effects) {
+            this.composer = new EffectComposer(this.renderer as THREE.WebGLRenderer);
+            this.effects = effects;
+
+            this.composer.addPass(new RenderPass(scene, camera));
+            for(const effect of effects) this.composer.addPass(effect);
+        }
 
         // Run the preload
-        if (options.setup) {
-            this.setup = options.setup;
+        if (setup) {
+            this.setup = setup;
         }
 
         // Attach the animation loop
-        if (options.loop) {
-            this.loop = options.loop;
+        if (loop) {
+            this.loop = loop;
         }
 
-        if (options.attached) {
+        if (attached) {
             this.attach();
         }
     }
@@ -64,7 +85,6 @@ export class Scene {
 export class Scenes {
     static readonly sceneKey = Symbol('Scene');
     static isScene(object): object is Scene {
-        // return object.__scn__;
         return object.__scn__ === this.sceneKey;
     }
 

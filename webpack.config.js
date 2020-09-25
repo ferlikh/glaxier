@@ -14,8 +14,7 @@ module.exports = [
             extensions: ['.ts', '.tsx', '.js'],
             modules: ['node_modules'],
             alias: {
-                'glaxier': path.resolve(__dirname, 'lib'),
-                'glaxier$': path.resolve(__dirname, 'lib', 'index.ts'),
+                'glaxier': path.resolve('lib'),
             }
         },
         entry: path.resolve('./lib'),
@@ -53,8 +52,7 @@ module.exports = [
             extensions: ['.ts', '.tsx', '.js'],
             modules: ['node_modules'],
             alias: {
-                'glaxier': path.resolve(__dirname, 'lib'),
-                'glaxier$': path.resolve(__dirname, 'lib', 'index.ts'),
+                'glaxier': path.resolve('lib'),
             }
         },
         devtool: 'source-map',
@@ -116,7 +114,7 @@ module.exports = [
             extensions: ['.ts', '.tsx', '.js'],
             modules: ['node_modules'],
             alias: {
-                'glaxier': path.resolve('./dist/lib.js'),
+                'glaxier': path.resolve('lib'),
             }
         },
         devtool: 'source-map',

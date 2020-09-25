@@ -14,7 +14,7 @@ export interface CompositeSceneOptions extends SceneOptions {
 export class CompositeScene extends ComposableScene {
     readonly loop: Function;
     readonly setup: Function;
-    protected readonly renderer: Renderer;
+    readonly renderer: Renderer;
     private bang: boolean; // should render or not
     constructor(options: CompositeSceneOptions) {
         const { attached } = options;
@@ -73,30 +73,30 @@ export function compose(windowManager: WindowManager) {
 }
 
 export function makeComposable(...scenes) {
-    const sources = scenes.map(scene => Scenes.lookup(scene).moduleImport);
-    const sceneSrc = "[" + sources.map(source => `require('${source}').render()`).join(', ') + "]";
 
     let camera;
-    const meshes = [];
-    const loops = [];
-    const setups = [];
+    const objects = [], loops = [], setups = [];
 
-    compileScenes(sceneSrc).forEach(compiledScene => {
-        const { loop, setup } = compiledScene;
+    const compiled = compileScenes(scenes);
+    for(const scene of compiled) {
+        const { loop, setup } = scene;
 
-        camera = compiledScene.camera;
+        camera = scene.camera;
         loops.push(loop);
         setups.push(setup);
-        [].push.apply(meshes, compiledScene.meshes ?? []);
-    });
+        [].push.apply(objects, scene.objects ?? []);
+    }
 
     return new CompositeScene({
-        camera, loops, setups, meshes, attached: true
-    })
+        attached: true,
+        camera, objects, loops, setups,
+    });
 
 }
 
-function compileScenes(src): SceneObject[] {
+function compileScenes(scenes): SceneObject[] {
+    const sources = scenes.map(scene => Scenes.lookup(scene).moduleImport);
+    const src = "[" + sources.map(source => `require('${source}').render()`).join(', ') + "]";
     return eval(src);
 }
 

@@ -72,10 +72,10 @@ export function render() {
     const cube = mesh(geometry, material);
     return new Scene({
         camera, 
-        meshes:[ cube ],
+        objects: [ cube ],
         setup: function() {
             this.camera.position.z = 5;
-            autoResize(this.renderer, this.camera);
+            autoResize(this);
             autoVRButton(this.renderer);
             autoExpose('color', cube.material.color, cube.material.color.getStyle);
             console.log('scene setup')

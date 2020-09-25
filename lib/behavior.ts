@@ -1,5 +1,6 @@
 import exposable from './exposable';
 import { VRButton } from './external';
+import { Scene } from './scene';
 import { Settable } from './util';
 
 const defaultExpose = (object: Settable, value) => {
@@ -13,12 +14,17 @@ export const autoExpose = (name: string, object: Settable | Function, init?: Fun
     exposable(window, name)(setter, init);
 }
 
-const defaultResize = (renderer: THREE.WebGLRenderer, camera: THREE.PerspectiveCamera) => {
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    camera.aspect = window.innerWidth / window.innerHeight;
+const defaultResize = (scene: Scene) => {
+    const { composer, renderer } = scene;
+    const camera = scene.camera as THREE.PerspectiveCamera,
+        width = window.innerWidth, height = window.innerHeight;
+
+    if(composer) composer.setSize(width, height);
+    renderer.setSize(width, height);
+    camera.aspect = width / height;
     camera.updateProjectionMatrix();
 }
-export const autoResize = (renderer, camera) => window.addEventListener('resize', () => defaultResize(renderer, camera));
+export const autoResize = scene => window.addEventListener('resize', () => defaultResize(scene));
 
 const defaultVRButton = (renderer: THREE.WebGLRenderer) => {
     document.body.appendChild(VRButton.createButton(renderer));
