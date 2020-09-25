@@ -1,6 +1,4 @@
-import path from 'path';
-import { Utils } from 'glaxier/util';
-import { WindowManager } from 'glaxier/window-manager';
+import { Utils, WindowManager } from 'glaxier';
 import { Scene, SceneOptions, Scenes } from './scene';
 import { Renderer } from 'three';
 
@@ -103,7 +101,6 @@ function compileScenes(src): SceneObject[] {
 }
 
 const dynamicComposedScene = sources => `
-
 <html>
     <head>
         <title>Dynamic Composed Scene</title>
@@ -121,35 +118,3 @@ const dynamicComposedScene = sources => `
         </script>
     </body>
 </html>`;
-
-
-function dynamicHTMLScene2(moduleImport) {
-    return `
-<html>
-    <head>
-        <title>Dynamic Rendered Scene</title>
-        <style>
-            body { margin: 0; }
-            canvas { display: block; }
-        </style>
-    </head>
-    <body>
-        <script src="dist://vendors.js"></script>
-        <script src="dist://lib.js"></script>
-        <script>
-            const { render } = require('${moduleImport}');
-            const scene = render();
-            console.log(scene);
-            Scenes.toScene(scene).attach();
-        </script>
-        <!-- <script src="${moduleImport}" defer></script> -->
-        <!-- <script src="renderer-lib.js" defer></script> -->
-        <!-- <script type="module">
-            // Scenes.toScene(render()).attach();
-            const scene = render();
-            console.log(scene);
-        </script> -->
-    </body>
-</html>
-            `;
-}
