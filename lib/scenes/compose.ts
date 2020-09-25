@@ -1,6 +1,7 @@
-import { Utils, WindowManager } from 'glaxier';
-import { Scene, SceneOptions, Scenes } from './scene';
 import { Renderer } from 'three';
+import { Scene, SceneOptions } from './scene';
+import { Utils, WindowManager } from 'glaxier';
+import Scenes from './scenes';
 
 export class ComposableScene extends Scene {
 

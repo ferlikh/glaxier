@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import url from 'url';
 import { BrowserWindow } from 'electron';
-import { Utils } from './util';
+import { Utils } from './utils';
 
 export class WindowManager {
     private DEFAULT_WIDTH = 1024;

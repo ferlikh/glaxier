@@ -1,3 +1,3 @@
 export class Symbols {
-    scene = Symbol('Scene');
+    static SCENE = Symbol('Scene');
 }

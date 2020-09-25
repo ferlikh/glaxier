@@ -1,5 +1,5 @@
-import { Scenes } from './scene';
-import { Utils } from 'glaxier/util';
+import Scenes from './scenes';
+import { Utils } from 'glaxier/utils';
 import { WindowManager } from 'glaxier/window-manager';
 
 export function render(windowManager: WindowManager) {

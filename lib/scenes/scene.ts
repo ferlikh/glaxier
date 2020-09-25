@@ -1,5 +1,5 @@
-import path from 'path';
-import { EffectComposer, Pass, RenderPass, Utils } from 'glaxier';
+import { EffectComposer, Pass, RenderPass } from 'glaxier';
+import { Symbols } from 'glaxier/symbols';
 import * as THREE from 'three';
 
 export interface SceneOptions {
@@ -13,7 +13,7 @@ export interface SceneOptions {
 }
 
 export class Scene {
-    readonly __scn__ = Scenes.sceneKey;
+    readonly __scn__ = Symbols.SCENE;
     readonly composer: EffectComposer;
     readonly renderer: THREE.Renderer;
     readonly scene: THREE.Scene;
@@ -82,31 +82,3 @@ export class Scene {
     }
 }
 
-export class Scenes {
-    static readonly sceneKey = Symbol('Scene');
-    static isScene(object): object is Scene {
-        return object.__scn__ === this.sceneKey;
-    }
-
-    static toScene(object: SceneOptions | Scene) {
-        const isScene = Scenes.isScene(object);
-        if(isScene) {
-            return object;
-        }
-        else {
-            return new Scene(object as SceneOptions);
-        }
-    }
-
-    static lookup(scene) {
-        const ext = path.extname(scene);
-        let fileName = scene;
-
-        if(!ext) fileName += '.js';
-        else if(ext !== '.js') {
-            throw new TypeError('scene function only expects .js files, please try another method');
-        }
-
-        return Utils.lookup(fileName);
-    }
-}

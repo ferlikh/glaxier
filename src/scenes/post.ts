@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import { ShaderPass, RGBShiftShader, DotScreenShader } from 'glaxier/external';
-import { autoResize } from 'glaxier/behavior';
+import { autoResize } from 'glaxier/behaviors';
+import { ShaderPass, RGBShiftShader, DotScreenShader } from 'glaxier/externals';
 
 export function render() {
     const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);

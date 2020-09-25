@@ -1,7 +1,7 @@
-import exposable from './exposable';
-import { VRButton } from './external';
-import { Scene } from './scene';
-import { Settable } from './util';
+import exposable from './exposables';
+import { VRButton } from './externals';
+import { Scene } from './scenes';
+import { Settable } from './utils';
 
 const defaultExpose = (object: Settable, value) => {
     object.set(value);

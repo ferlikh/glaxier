@@ -1,4 +1,4 @@
-import { autoExpose, autoResize, autoVRButton, Cameras, Geometries, Materials, mesh } from "glaxier";
+import { autoExpose, autoResize, autoVRButton, Cameras, Geometries, Materials, mesh } from 'glaxier';
 import * as THREE from 'three';
 let rotationSpeed = 1;
 const DEFAULT_GREY = 0x9e9e9e;
