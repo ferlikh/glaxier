@@ -55,7 +55,7 @@ module.exports = [
                 'glaxier': path.resolve('lib'),
             }
         },
-        devtool: 'source-map',
+        devtool: 'inline-source-map',
         entry: {
             lib: path.resolve('./lib'),
             main: path.resolve('./src/main.ts'),
@@ -117,7 +117,7 @@ module.exports = [
                 'glaxier': path.resolve('lib'),
             }
         },
-        devtool: 'source-map',
+        devtool: 'inline-source-map',
         entry: {
             'renderer-lib': path.resolve('./lib'),
             ...globFiles('./src/scenes/*.ts'),
@@ -156,7 +156,11 @@ module.exports = [
         },
         output: {
             path: path.resolve('dist'),
-            filename: '[name].js',
+            filename: (pathData) => {
+                const sceneDir = path.resolve('./src/scenes');
+                const isScene = pathData.chunk.entryModule.context === sceneDir;
+                return isScene ? 'scenes/[name].js': '[name].js';
+              },
             libraryTarget: 'global',
             globalObject: 'this',
         },

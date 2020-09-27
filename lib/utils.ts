@@ -7,7 +7,7 @@ export interface Settable {
 
 export class Utils {
     static readonly stagingFile = path.resolve(__dirname, '..', 'dist', 'stage.html');
-    private static readonly defaultDirs = ['.', 'dist'];
+    private static readonly defaultDirs = ['dist', 'dist/scenes'];
     private static readonly registeredDirs = [];
 
     static load(filePath) {
