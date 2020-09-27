@@ -1,7 +1,7 @@
+import Scenes from './scenes';
 import { Renderer } from 'three';
 import { Scene, SceneOptions } from './scene';
 import { Utils, WindowManager } from 'glaxier';
-import Scenes from './scenes';
 
 export class ComposableScene extends Scene {
 
@@ -76,7 +76,7 @@ export function compose(windowManager: WindowManager) {
 export function makeComposable(...scenes) {
 
     let camera;
-    const objects = [], loops = [], setups = [];
+    const effects = [], objects = [], loops = [], setups = [];
 
     const compiled = compileScenes(scenes);
     for(const scene of compiled) {
@@ -85,12 +85,13 @@ export function makeComposable(...scenes) {
         camera = scene.camera;
         loops.push(loop);
         setups.push(setup);
+        [].push.apply(effects, scene.effects ?? []);
         [].push.apply(objects, scene.objects ?? []);
     }
 
     return new CompositeScene({
         attached: true,
-        camera, objects, loops, setups,
+        camera, effects, objects, loops, setups,
     });
 
 }

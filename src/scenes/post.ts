@@ -26,10 +26,10 @@ export function render() {
     const light = new THREE.DirectionalLight(0xffffff);
     light.position.set(1, 1, 1);
 
-    var effect1 = new ShaderPass(DotScreenShader);
+    const effect1 = new ShaderPass(DotScreenShader);
     effect1.uniforms.scale.value = 4;
 
-    var effect2 = new ShaderPass(RGBShiftShader);
+    const effect2 = new ShaderPass(RGBShiftShader);
     effect2.uniforms.amount.value = 0.0015;
 
     return {
