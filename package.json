@@ -1,6 +1,6 @@
 {
   "name": "glaxier",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "WebGL Augmented-eXtended Integrated Environment REPL",
   "main": "dist/bundles/index.js",
   "types": "dist/typings/index.d.js",
