@@ -2,6 +2,8 @@ import { EffectComposer, Pass, RenderPass } from 'glaxier';
 import { Symbols } from 'glaxier/symbols';
 import * as THREE from 'three';
 
+export type SceneObject = (Scene | SceneOptions);
+
 export interface SceneOptions {
     camera: THREE.Camera;
     effects?: Pass[];

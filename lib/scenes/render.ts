@@ -2,20 +2,17 @@ import Scenes from './scenes';
 import { Utils } from 'glaxier/utils';
 import { WindowManager } from 'glaxier/window-manager';
 
-export function render(windowManager: WindowManager) {
-    return function render(scene, window?) {
-        
-        const { scriptSrc } = Scenes.lookup(scene)
-        Utils.stage(dynamicScene(scriptSrc));
+export function render(scene, window?) {
+    const { scriptSrc } = Scenes.lookup(scene)
+    Utils.stage(dynamicScene(scriptSrc));
 
-        if(typeof window === 'string') {
-            window = windowManager.windows[window];
-        }
-
-        return window ?
-            windowManager.loadWindow(window, Utils.stagingFile) :
-            windowManager.open({ name: scene, src: Utils.stagingFile });
+    if (typeof window === 'string') {
+        window = WindowManager.windows[window];
     }
+
+    return window ?
+        WindowManager.loadWindow(window, Utils.stagingFile) :
+        WindowManager.open({ name: scene, src: Utils.stagingFile });
 }
 
 const dynamicScene = scriptSrc => `
@@ -29,10 +26,11 @@ const dynamicScene = scriptSrc => `
     </head>
     <body>
         <script src="dist://vendors.js"></script>
-        <script src="dist://lib.js"></script>
+        <script src="dist://renderer-lib.js"></script>
         <script src="dist://${scriptSrc}"></script>
         <script>
-            Scenes.toScene(render()).attach();
+            const theScene = Scenes.toScene(render());
+            theScene.attach();
         </script>
     </body>
 </html>`;

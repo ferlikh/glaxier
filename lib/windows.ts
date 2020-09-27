@@ -1,3 +1,5 @@
-export function window(windowManager) {
-    return (name, template) => windowManager.open(name, template);
+import { WindowManager } from "./window-manager";
+
+export function window(config) {
+    return WindowManager.open(config);
 }

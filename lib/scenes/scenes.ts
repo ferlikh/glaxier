@@ -1,5 +1,6 @@
 import path from 'path';
-import { SceneOptions, Scene } from './scene';
+import { SceneOptions, Scene, SceneObject } from './scene';
+import { CompositeScene } from './composite';
 import { Utils } from 'glaxier';
 import { Symbols } from 'glaxier/symbols';
 
@@ -9,9 +10,9 @@ export default class Scenes {
         return object.__scn__ === this.sceneKey;
     }
 
-    static toScene(object: SceneOptions | Scene) {
+    static toScene(object: SceneObject) {
         const isScene = Scenes.isScene(object);
-        if(isScene) {
+        if (isScene) {
             return object;
         }
         else {
@@ -23,11 +24,48 @@ export default class Scenes {
         const ext = path.extname(scene);
         let fileName = scene;
 
-        if(!ext) fileName += '.js';
-        else if(ext !== '.js') {
+        if (!ext) fileName += '.js';
+        else if (ext !== '.js') {
             throw new TypeError('scene function only expects .js files, please try another method');
         }
 
         return Utils.lookup(fileName);
+    }
+
+    static toComposite(scene: SceneObject) {
+        const { camera, loop, setup } = scene;
+        const loops = [loop];
+        const setups = [setup];
+        const effects = scene.effects? [...scene.effects]: [];
+        const objects = scene.objects? [...scene.objects]: [];
+        return new CompositeScene({
+            camera, effects, objects, loops, setups,
+        });
+    }
+
+    static compose(...scenes) {
+        let camera;
+        const effects = [], objects = [], loops = [], setups = [];
+
+        const compiled = Scenes.compile(scenes);
+        for (const scene of compiled) {
+            const { loop, setup } = scene;
+
+            camera = scene.camera;
+            loops.push(loop);
+            setups.push(setup);
+            [].push.apply(effects, scene.effects ?? []);
+            [].push.apply(objects, scene.objects ?? []);
+        }
+
+        return new CompositeScene({
+            attached: true,
+            camera, effects, objects, loops, setups,
+        });
+    }
+
+    private static compile(scenes): SceneObject[] {
+        const sources = scenes.map(scene => Scenes.lookup(scene).moduleImport);
+        return eval("[" + sources.map(source => `require('${source}').render()`).join(', ') + "]");
     }
 }

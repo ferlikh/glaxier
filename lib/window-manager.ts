@@ -5,18 +5,16 @@ import { BrowserWindow } from 'electron';
 import { Utils } from './utils';
 
 export class WindowManager {
-    private DEFAULT_WIDTH = 1024;
-    private DEFAULT_HEIGHT = 768;
-    windows: { [key: string]: BrowserWindow } = {};
-    get windowList() {
-        return Object.values(this.windows);
-    }
-    open(config) {
+    private static DEFAULT_WIDTH = 1024;
+    private static DEFAULT_HEIGHT = 768;
+    static windows: { [key: string]: BrowserWindow } = {};
+
+    static open(config) {
         const isObject = typeof config === 'object'; 
         const name = isObject? config.name: config;
         const win = new BrowserWindow({
-            width: this.DEFAULT_WIDTH,
-            height: this.DEFAULT_HEIGHT,
+            width: WindowManager.DEFAULT_WIDTH,
+            height: WindowManager.DEFAULT_HEIGHT,
             webPreferences: {
                 nodeIntegration: true,
                 experimentalFeatures: true,
@@ -25,7 +23,7 @@ export class WindowManager {
             frame: true,
         });
 
-        this.registerWindow(win, name);
+        WindowManager.registerWindow(win, name);
         Object.defineProperty(win, 'exec', {
             value: function exec(code) {
                 return win.webContents.executeJavaScript(code);
@@ -34,27 +32,27 @@ export class WindowManager {
 
         if(isObject && config.src) {
             const { src } = config;
-            this.loadHTML(win, src);
+            WindowManager.loadHTML(win, src);
         }
         return win;
     }
 
-    loadWindow(window: BrowserWindow, file: string) {
-        return this.loadHTML(window, file);
+    static loadWindow(window: BrowserWindow, file: string) {
+        return WindowManager.loadHTML(window, file);
     }
 
-    private loadHTML(window: BrowserWindow, file: string) {
+    private static loadHTML(window: BrowserWindow, file: string) {
         if(!path.extname(file)) file += '.html';
 
         // absolute path
         if(fs.existsSync(file)) {
-            return this.loadURL(window, file);
+            return WindowManager.loadURL(window, file);
         }
         // relative path
         else {
             const { relativePath } = Utils.lookup(file);
             if(relativePath) {
-                return this.loadURL(window, relativePath);
+                return WindowManager.loadURL(window, relativePath);
             }
             else {
                 console.error(`ERR: ${file} not found.`);
@@ -62,7 +60,7 @@ export class WindowManager {
         }
     }
 
-    private loadURL(window: BrowserWindow, pathname: string) {
+    private static loadURL(window: BrowserWindow, pathname: string) {
         window.loadURL(url.format({
             pathname,
             protocol: 'file',
@@ -71,9 +69,9 @@ export class WindowManager {
         return window;
     }
 
-    private registerWindow(window: BrowserWindow, name: string | number) {
+    private static registerWindow(window: BrowserWindow, name: string | number) {
         if (name == null) {
-            const noWindows = this.windowList.length;
+            const noWindows = Object.values(this.windows).length;
             if (this.windows[noWindows]) {
                 name = -1;
                 while (!this.windows[++name]) { }

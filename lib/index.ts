@@ -1,5 +1,6 @@
 export * from './behaviors';
 export * from './cameras';
+export * from './effects';
 export * from './externals';
 export * from './geometries';
 export * from './materials';

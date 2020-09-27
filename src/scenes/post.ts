@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { autoResize } from 'glaxier/behaviors';
-import { ShaderPass, RGBShiftShader, DotScreenShader } from 'glaxier/externals';
+import { ShaderPass, BlendShader, RGBShiftShader, DotScreenShader, GlitchPass } from 'glaxier/externals';
 
 export function render() {
     const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
@@ -9,9 +9,7 @@ export function render() {
     const object = new THREE.Object3D();
     const geometry = new THREE.SphereBufferGeometry(1, 4, 4);
     const material = new THREE.MeshPhongMaterial({ color: 0xffffff, flatShading: true });
-
     for (let i = 0; i < 100; i++) {
-
         const mesh = new THREE.Mesh(geometry, material);
         mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
         mesh.position.multiplyScalar(Math.random() * 400);

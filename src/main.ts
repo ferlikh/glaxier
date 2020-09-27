@@ -50,16 +50,19 @@ app.on('window-all-closed', (e) => {
     // console.log('window-all-closed', e)
 });
 
-const windowManager = new WindowManager;
-
 Utils.registerPath('dist/html');
 
 const context = {
     ...lib,
-    window: lib.window(windowManager),
-    render: lib.render(windowManager),
-    compose: lib.compose(windowManager),
-    $winman: windowManager,
+    $winman: Object.defineProperties({}, {
+        windows: {
+            enumerable: true,
+            get: () => WindowManager.windows
+        },
+        open: {
+            get: () => WindowManager.open
+        }
+    }),
 };
 const sandbox = vm.createContext(context);
 

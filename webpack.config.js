@@ -119,6 +119,7 @@ module.exports = [
         },
         devtool: 'source-map',
         entry: {
+            'renderer-lib': path.resolve('./lib'),
             ...globFiles('./src/scenes/*.ts'),
         },
         target: 'electron-renderer',

@@ -6,10 +6,13 @@ export { VRButton } from 'three/examples/jsm/webxr/VRButton';
 
 // postprocessing (passes + composers)
 export { Pass } from 'three/examples/jsm/postprocessing/Pass';
+export { GlitchPass } from 'three/examples/jsm/postprocessing/GlitchPass';
 export { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 export { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass';
 export { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
 
 // shaders
-export { RGBShiftShader } from 'three/examples/jsm/shaders/RGBShiftShader';
+export { BasicShader } from 'three/examples/jsm/shaders/BasicShader';
+export { BlendShader } from 'three/examples/jsm/shaders/BlendShader';
 export { DotScreenShader } from 'three/examples/jsm/shaders/DotScreenShader';
+export { RGBShiftShader } from 'three/examples/jsm/shaders/RGBShiftShader';
