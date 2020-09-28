@@ -5,6 +5,10 @@ export interface Settable {
     set(value: any);
 }
 
+export interface Valuable {
+    value: any;
+}
+
 export class Utils {
     static readonly stagingFile = path.resolve(__dirname, '..', 'dist', 'stage.html');
     private static readonly defaultDirs = ['dist', 'dist/scenes'];

@@ -1,5 +1,9 @@
-export default function exposable(object, name) {
-    return function (setter, initializer?: Function | any) {
+import { Settable, Valuable } from 'glaxier/utils';
+export type Exposable = Function | Settable | Valuable;
+export type Initializer<T = any> = T | Function;
+
+export function exposable(object, name) {
+    return function (setter, initializer?: Initializer) {
         const hasInitializerFn = initializer instanceof Function;
         const key = Symbol();
         const getter = hasInitializerFn?

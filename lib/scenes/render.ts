@@ -29,8 +29,8 @@ const dynamicScene = scriptSrc => `
         <script src="dist://renderer-lib.js"></script>
         <script src="dist://${scriptSrc}"></script>
         <script>
-            const theScene = Scenes.toScene(render());
-            theScene.attach();
+            const $scene = Scenes.toScene(render());
+            $scene.attach();
         </script>
     </body>
 </html>`;

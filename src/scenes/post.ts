@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { autoResize } from 'glaxier/behaviors';
-import { ShaderPass, BlendShader, RGBShiftShader, DotScreenShader, GlitchPass } from 'glaxier/externals';
+import { Exposes } from 'glaxier/exposables';
+import { ShaderPass, RGBShiftShader, DotScreenShader } from 'glaxier/externals';
 
 export function render() {
     const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
@@ -16,7 +17,6 @@ export function render() {
         mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
         mesh.scale.x = mesh.scale.y = mesh.scale.z = Math.random() * 50;
         object.add(mesh);
-
     }
 
     const ambientLight = new THREE.AmbientLight(0x222222);
@@ -30,10 +30,16 @@ export function render() {
     const effect2 = new ShaderPass(RGBShiftShader);
     effect2.uniforms.amount.value = 0.0015;
 
+    const dotScale = Exposes.prop(effect1.uniforms.scale);
+    const rgbShiftAmount = Exposes.prop(effect2.uniforms.amount);
+
     return {
         camera,
         effects: [effect1, effect2],
         objects: [ambientLight, light, object],
+        props: {
+            dotScale, rgbShiftAmount
+        },
         setup: function () {
             this.renderer.setPixelRatio(window.devicePixelRatio);
             this.renderer.setSize(window.innerWidth, window.innerHeight);

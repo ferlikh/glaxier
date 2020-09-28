@@ -1,4 +1,4 @@
-import exposable from './exposables';
+import { exposable } from './exposables';
 import { VRButton } from './externals';
 import { Scene } from './scenes';
 import { Settable } from './utils';
