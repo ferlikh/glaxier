@@ -5,14 +5,7 @@ import { WindowManager } from 'glaxier/window-manager';
 export function render(scene, window?) {
     const { scriptSrc } = Scenes.lookup(scene)
     Utils.stage(dynamicScene(scriptSrc));
-
-    if (typeof window === 'string') {
-        window = WindowManager.windows[window];
-    }
-
-    return window ?
-        WindowManager.loadWindow(window, Utils.stagingFile) :
-        WindowManager.open({ name: scene, src: Utils.stagingFile });
+    return WindowManager.load(scene, window);
 }
 
 const dynamicScene = scriptSrc => `

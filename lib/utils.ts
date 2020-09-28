@@ -14,17 +14,6 @@ export class Utils {
     private static readonly defaultDirs = ['dist', 'dist/scenes'];
     private static readonly registeredDirs = [];
 
-    static load(filePath) {
-        try {
-            const exports = eval(`require('${filePath}')`);
-            return exports;
-        }
-        catch (e) {
-            console.error(e);
-            return {};
-        }
-    }
-
     static stage(html) {
         fs.writeFileSync(this.stagingFile, html);
     }
@@ -46,6 +35,7 @@ export class Utils {
         }
         return {};
     }
+
 }
 
 export class ObjectParser {

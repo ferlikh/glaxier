@@ -1,4 +1,5 @@
-export { glitch } from './glitch';
+export { glitchPass } from './glitch';
+export { sobelPass } from './sobel';
 
 import Effects from './effects';
 import FX from './fx';

@@ -1,3 +1,4 @@
+import Effects from './effects';
 import { GlitchPass, Scene, SceneObject, SceneOptions, Scenes, Utils, WindowManager } from 'glaxier';
 
 const glitchStage = scriptSrc => `
@@ -20,12 +21,7 @@ const glitchStage = scriptSrc => `
 </html>`;
 
 function glitchOptions(options: SceneOptions) {
-    let { effects } = options;
-    const glitchPass = new GlitchPass;
-    if(!Array.isArray(effects)) 
-        effects = [glitchPass];
-    else effects.push(glitchPass);
-    return { ...options, effects };
+   return Effects.addPasses(options, [new GlitchPass]);
 }
 
 export function glitchEffect(scene: SceneObject) {
@@ -37,15 +33,8 @@ export function glitchEffect(scene: SceneObject) {
 }
 
 
-export function glitch(scene, window?) {
+export function glitchPass(scene, window?) {
     const { scriptSrc } = Scenes.lookup(scene)
     Utils.stage(glitchStage(scriptSrc));
-
-    if (typeof window === 'string') {
-        window = WindowManager.windows[window];
-    }
-
-    return window ?
-        WindowManager.loadWindow(window, Utils.stagingFile) :
-        WindowManager.open({ name: scene, src: Utils.stagingFile });
+    return WindowManager.load(scene, window);
 }

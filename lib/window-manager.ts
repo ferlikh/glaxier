@@ -10,8 +10,8 @@ export class WindowManager {
     static windows: { [key: string]: BrowserWindow } = {};
 
     static open(config) {
-        const isObject = typeof config === 'object'; 
-        const name = isObject? config.name: config;
+        const isObject = typeof config === 'object';
+        const name = isObject ? config.name : config;
         const win = new BrowserWindow({
             width: WindowManager.DEFAULT_WIDTH,
             height: WindowManager.DEFAULT_HEIGHT,
@@ -30,11 +30,21 @@ export class WindowManager {
             }
         });
 
-        if(isObject && config.src) {
+        if (isObject && config.src) {
             const { src } = config;
             WindowManager.loadHTML(win, src);
         }
         return win;
+    }
+
+    static load(scene, window) {
+        if (typeof window === 'string') {
+            window = WindowManager.windows[window];
+        }
+
+        return window ?
+            WindowManager.loadWindow(window, Utils.stagingFile) :
+            WindowManager.open({ name: scene, src: Utils.stagingFile });
     }
 
     static loadWindow(window: BrowserWindow, file: string) {
@@ -42,16 +52,16 @@ export class WindowManager {
     }
 
     private static loadHTML(window: BrowserWindow, file: string) {
-        if(!path.extname(file)) file += '.html';
+        if (!path.extname(file)) file += '.html';
 
         // absolute path
-        if(fs.existsSync(file)) {
+        if (fs.existsSync(file)) {
             return WindowManager.loadURL(window, file);
         }
         // relative path
         else {
             const { relativePath } = Utils.lookup(file);
-            if(relativePath) {
+            if (relativePath) {
                 return WindowManager.loadURL(window, relativePath);
             }
             else {
@@ -80,7 +90,7 @@ export class WindowManager {
                 name = noWindows;
             }
         }
-        else if(name in this.windows) {
+        else if (name in this.windows) {
             name += Object.keys(this.windows).filter(key => key.includes(name as string)).length.toString();
         }
         this.windows[name] = window;

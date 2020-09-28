@@ -16,4 +16,6 @@ export { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 export { BasicShader } from 'three/examples/jsm/shaders/BasicShader';
 export { BlendShader } from 'three/examples/jsm/shaders/BlendShader';
 export { DotScreenShader } from 'three/examples/jsm/shaders/DotScreenShader';
+export { LuminosityShader } from 'three/examples/jsm/shaders/LuminosityShader';
 export { RGBShiftShader } from 'three/examples/jsm/shaders/RGBShiftShader';
+export { SobelOperatorShader } from 'three/examples/jsm/shaders/SobelOperatorShader';
