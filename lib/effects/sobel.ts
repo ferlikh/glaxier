@@ -29,13 +29,8 @@ function sobelOptions(options: SceneOptions) {
 }
 
 export function sobelEffect(scene: SceneObject) {
-    if(Scenes.isScene(scene)) {
-        const { options } = scene as Scene;
-        return Scenes.toComposite(sobelOptions(options));
-    }
-    return Scenes.toComposite(sobelOptions(scene));
+    return Effects.applyFX(scene, sobelOptions);
 }
-
 
 export function sobelPass(scene, window?) {
     const { scriptSrc } = Scenes.lookup(scene)

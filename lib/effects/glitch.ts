@@ -25,11 +25,7 @@ function glitchOptions(options: SceneOptions) {
 }
 
 export function glitchEffect(scene: SceneObject) {
-    if(Scenes.isScene(scene)) {
-        const { options } = scene as Scene;
-        return Scenes.toComposite(glitchOptions(options));
-    }
-    return Scenes.toComposite(glitchOptions(scene));
+    return Effects.applyFX(scene, glitchOptions);
 }
 
 
