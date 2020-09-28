@@ -20,7 +20,10 @@ export interface SceneOptions {
 const INVALID_PROPS_REGISTRY = ['__scn__', 'scene', 'scenes',
     'setup', 'setups', 'loop', 'loops', '_attached', 'attached',
     'renderer', 'camera', 'objects', 'effects', 'props', 'options',
-    'lights', 'meshes', 'attach'].reduce((dict, propName) => dict[propName] = true, {});
+    'lights', 'meshes', 'attach'].reduce((dict, propName) => {
+        dict[propName] = true;
+        return dict;
+    }, {});
 
 export class Scene {
     readonly __scn__ = Symbols.SCENE;
