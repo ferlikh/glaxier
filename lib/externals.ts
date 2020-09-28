@@ -7,6 +7,7 @@ export { VRButton } from 'three/examples/jsm/webxr/VRButton';
 // postprocessing (passes + composers)
 export { Pass } from 'three/examples/jsm/postprocessing/Pass';
 export { GlitchPass } from 'three/examples/jsm/postprocessing/GlitchPass';
+export { HalftonePass } from 'three/examples/jsm/postprocessing/HalftonePass';
 export { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 export { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass';
 export { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
