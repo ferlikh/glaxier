@@ -44,24 +44,25 @@ export default class Scenes {
     }
 
     static compose(...scenes) {
-        let camera;
+        let camera, container;
         const effects = [], objects = [], props = {}, loops = [], setups = [];
 
         const compiled = Scenes.compile(scenes);
         for (const scene of compiled) {
             const { loop, setup } = scene;
 
-            camera = scene.camera;
             loops.push(loop);
             setups.push(setup);
+            camera = scene.camera ?? camera;
+            container = scene.container ?? container;
             [].push.apply(effects, scene.effects ?? []);
             [].push.apply(objects, scene.objects ?? []);
             Object.assign(props, scene.props ?? {});
         }
 
         return new CompositeScene({
-            attached: true,
-            camera, effects, objects, loops, setups,
+            attached: true, container,
+            camera, effects, objects, props, loops, setups,
         });
     }
 

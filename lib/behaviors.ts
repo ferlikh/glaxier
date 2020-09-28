@@ -21,10 +21,18 @@ const defaultResize = (scene: Scene) => {
 
     if(composer) composer.setSize(width, height);
     renderer.setSize(width, height);
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
+    
+    if(camera) {
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+    }
 }
-export const autoResize = scene => window.addEventListener('resize', () => defaultResize(scene));
+export const autoResize = (scene: Scene, customResize?: (aspect: number) => void) => {
+    const resizeFn = !customResize? 
+        defaultResize.bind(null, scene) // default behavior
+        : customResize.bind(scene); // custom callback
+    window.addEventListener('resize', () => resizeFn(window.innerWidth / window.innerHeight), false);
+}
 
 const defaultVRButton = (renderer: THREE.WebGLRenderer) => {
     document.body.appendChild(VRButton.createButton(renderer));

@@ -7,19 +7,20 @@ export type SceneObject = (Scene | SceneOptions);
 export type Props = { [name: string]: PropertyDescriptor };
 
 export interface SceneOptions {
-    camera: THREE.Camera;
+    camera?: THREE.Camera;
     effects?: Pass[];
-    objects: THREE.Object3D[];
+    objects?: THREE.Object3D[];
     props?: Props;
     renderer?: THREE.Renderer;
     loop?: Function;
     setup?: Function;
     attached?: boolean;
+    container?: HTMLElement;
 }
 
 const INVALID_PROPS_REGISTRY = ['__scn__', 'scene', 'scenes',
     'setup', 'setups', 'loop', 'loops', '_attached', 'attached',
-    'renderer', 'camera', 'objects', 'effects', 'props', 'options',
+    'renderer', 'container', 'camera', 'objects', 'effects', 'props', 'options',
     'lights', 'meshes', 'attach'].reduce((dict, propName) => {
         dict[propName] = true;
         return dict;
@@ -36,6 +37,7 @@ export class Scene {
     readonly props: Props;
     readonly loop: Function;
     readonly setup: Function;
+    readonly container?: HTMLElement;
 
     private _attached: boolean;
     get attached() { return this._attached };
@@ -48,7 +50,7 @@ export class Scene {
 
     constructor(readonly options: SceneOptions) {
         const scene = this.scene = new THREE.Scene;
-        const { renderer, camera, objects, effects, props, setup, loop, attached } = options;
+        const { renderer, camera, objects, effects, props, setup, loop, attached, container } = options;
 
         if (props) {
             this.props = props;
@@ -65,6 +67,7 @@ export class Scene {
         }
 
         this.camera = camera;
+        this.container = container;
         this.objects = objects ?? [];
 
         if (this.objects.length) this.scene.add(...this.objects);
@@ -96,8 +99,9 @@ export class Scene {
             if (this.setup) this.setup.call(this);
             const renderer = this.renderer as THREE.WebGLRenderer;
             renderer.setAnimationLoop(this.loop.bind(this));
-            document.body.appendChild(this.renderer.domElement);
-            this._attached = true
+            const container = this.container ?? document.body;
+            container.appendChild(this.renderer.domElement);
+            this._attached = true;
         }
     }
 }
