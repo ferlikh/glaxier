@@ -1,4 +1,5 @@
-import { autoResize } from 'glaxier';
+import { autoKeySwitch, autoResize } from 'glaxier';
+import { Exposes } from 'glaxier/exposables';
 import * as THREE from 'three';
 
 export function render() {
@@ -69,6 +70,10 @@ export function render() {
     return {
         container,
         objects: [cameraPerspectiveHelper, cameraOrthoHelper, cameraRig, mesh, particles],
+        props: {
+            activeCamera: Exposes.prop(camera => activeCamera = camera, () => activeCamera),
+            activeHelper: Exposes.prop(helper => activeHelper = helper, () => activeHelper),
+        },
         renderer,
         setup: function () {
             renderer.setPixelRatio(window.devicePixelRatio);
@@ -90,9 +95,19 @@ export function render() {
                 cameraOrtho.bottom = - frustumSize / 2;
                 cameraOrtho.updateProjectionMatrix();
             });
+            autoKeySwitch(this, {
+                "O": {
+                    activeCamera: cameraOrtho,
+					activeHelper: cameraOrthoHelper
+                },
+                "P": {
+                    activeCamera: cameraPerspective,
+					activeHelper: cameraPerspectiveHelper
+                }
+            });
         },
         loop: function () {
-            var r = Date.now() * 0.0005;
+            const r = Date.now() * 0.0005;
 
             mesh.position.x = 700 * Math.cos(r);
             mesh.position.z = 700 * Math.sin(r);
@@ -101,7 +116,7 @@ export function render() {
             mesh.children[0].position.x = 70 * Math.cos(2 * r);
             mesh.children[0].position.z = 70 * Math.sin(r);
 
-            if (activeCamera === cameraPerspective) {
+            if (this.activeCamera === cameraPerspective) {
 
                 cameraPerspective.fov = 35 + 30 * Math.sin(0.5 * r);
                 cameraPerspective.far = mesh.position.length();
@@ -128,12 +143,12 @@ export function render() {
 
             renderer.clear();
 
-            activeHelper.visible = false;
+            this.activeHelper.visible = false;
 
             renderer.setViewport(0, 0, window.innerWidth / 2, window.innerHeight);
-            renderer.render(this.scene, activeCamera);
+            renderer.render(this.scene, this.activeCamera);
 
-            activeHelper.visible = true;
+            this.activeHelper.visible = true;
 
             renderer.setViewport(window.innerWidth / 2, 0, window.innerWidth / 2, window.innerHeight);
             renderer.render(this.scene, camera);

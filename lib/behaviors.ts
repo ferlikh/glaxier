@@ -39,3 +39,27 @@ const defaultVRButton = (renderer: THREE.WebGLRenderer) => {
     renderer.xr.enabled = true;
 }
 export const autoVRButton = renderer => defaultVRButton(renderer);
+
+export const autoKeySwitch = (object, config, matchCase = false) => {
+    const keys = Object.keys(config);
+    if(!matchCase) {
+        keys.filter(k => k.length === 1).forEach(key => {
+            const upper = key.toUpperCase(), 
+                lower = key.toLowerCase();
+            
+            if(!(lower in config)) {
+                config[lower] = config[upper];
+            }
+            else if(!(upper in config)) {
+                config[lower] = config[upper];
+            }
+
+        })
+    }
+    window.addEventListener('keydown', event => {
+        const values = config[event.key]
+        if(!values) return;
+        Object.entries(values)
+            .forEach(([prop, target]) => object[prop] = target);
+    });
+}
