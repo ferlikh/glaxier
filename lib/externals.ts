@@ -1,8 +1,9 @@
 /**
  * This file is to export vendor code for use within the library.
  */
-
+import StatsModule from 'three/examples/jsm/libs/stats.module';
 export { VRButton } from 'three/examples/jsm/webxr/VRButton';
+
 
 // postprocessing (passes + composers)
 export { Pass } from 'three/examples/jsm/postprocessing/Pass';
@@ -12,6 +13,7 @@ export { HalftonePass } from 'three/examples/jsm/postprocessing/HalftonePass';
 export { ClearMaskPass, MaskPass } from 'three/examples/jsm/postprocessing/MaskPass';
 export { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 export { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass';
+export { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass';
 export { TexturePass } from 'three/examples/jsm/postprocessing/TexturePass';
 export { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
 
@@ -23,3 +25,8 @@ export { DotScreenShader } from 'three/examples/jsm/shaders/DotScreenShader';
 export { LuminosityShader } from 'three/examples/jsm/shaders/LuminosityShader';
 export { RGBShiftShader } from 'three/examples/jsm/shaders/RGBShiftShader';
 export { SobelOperatorShader } from 'three/examples/jsm/shaders/SobelOperatorShader';
+
+const Stats = (StatsModule as VoidFunction);
+export {
+    Stats
+}
