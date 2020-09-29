@@ -1,6 +1,6 @@
 export * from './compose';
 export * from './render';
-export * from './scene';
+export * from './types';
 
 import Scenes from './scenes';
 export { Scenes };

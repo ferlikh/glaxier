@@ -11,6 +11,7 @@ export interface SceneOptions {
     effects?: Pass[];
     objects?: THREE.Object3D[];
     props?: Props;
+    composer?: EffectComposer;
     renderer?: THREE.Renderer;
     loop?: Function;
     setup?: Function;
@@ -50,7 +51,7 @@ export class Scene {
 
     constructor(readonly options: SceneOptions) {
         const scene = this.scene = new THREE.Scene;
-        const { renderer, camera, objects, effects, props, setup, loop, attached, container } = options;
+        const { renderer, composer, camera, objects, effects, props, setup, loop, attached, container } = options;
 
         if (props) {
             this.props = props;
@@ -78,6 +79,9 @@ export class Scene {
 
             this.composer.addPass(new RenderPass(scene, camera));
             for (const effect of effects) this.composer.addPass(effect);
+        }
+        else if(composer) {
+            this.composer = composer;
         }
 
         // Attach the setup + animation loop

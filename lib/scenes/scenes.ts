@@ -1,6 +1,7 @@
 import path from 'path';
-import { SceneOptions, Scene, SceneObject } from './scene';
-import { CompositeScene } from './composite';
+import { SceneOptions, Scene, SceneObject } from './types/scene';
+import { CompositeScene, CompositeSceneOptions } from './types/composite';
+import { MultiScene, MultiSceneOptions } from './types/multi';
 import { Utils } from 'glaxier';
 import { Symbols } from 'glaxier/symbols';
 
@@ -10,14 +11,17 @@ export default class Scenes {
         return object.__scn__ === this.sceneKey;
     }
 
-    static toScene(object: SceneObject) {
+    static create(object: SceneObject | CompositeSceneOptions | MultiSceneOptions) {
         const isScene = Scenes.isScene(object);
-        if (isScene) {
-            return object;
+        if (isScene) return object;
+        // scene options
+        else if('loops' in object) {
+            return new CompositeScene(object);
         }
-        else {
-            return new Scene(object as SceneOptions);
+        else if('scenes' in object) {
+            return new MultiScene(object);
         }
+        return new Scene(object as SceneOptions);
     }
 
     static lookup(scene) {
