@@ -29,6 +29,10 @@ export class Geometries {
         return new THREE.BoxGeometry(width, height, depth, widthSegments, heightSegments, depthSegments); 
     }
 
+    static buffer() {
+        return new THREE.BufferGeometry();
+    }
+
     static sphere(
         radius: number = this.DEFAULT_RADIUS,
         widthSegments: number = this.DEFAULT_WIDTH_SEG_SPH,
@@ -39,5 +43,17 @@ export class Geometries {
         thetaLength: number = this.DEFAULT_THETA_LEN,
     ) {
         return new THREE.SphereGeometry(radius, widthSegments, heightSegments, phiStart, phiLength, thetaStart, thetaLength)
+    }
+
+    static sphereBuffer(
+        radius: number = this.DEFAULT_RADIUS,
+        widthSegments: number = this.DEFAULT_WIDTH_SEG_SPH,
+        heightSegments: number = this.DEFAULT_HEIGHT_SEG_SPH,
+        phiStart: number = this.DEFAULT_PHI_START,
+        phiLength: number = this.DEFAULT_PHI_LEN,
+        thetaStart: number = this.DEFAULT_THETA_START,
+        thetaLength: number = this.DEFAULT_THETA_LEN,
+    ) {
+        return new THREE.SphereBufferGeometry(radius, widthSegments, heightSegments, phiStart, phiLength, thetaStart, thetaLength)
     }
 }

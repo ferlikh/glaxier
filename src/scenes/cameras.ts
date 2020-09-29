@@ -1,4 +1,4 @@
-import { autoKeySwitch, autoResize } from 'glaxier';
+import { autoKeySwitch, autoResize, Geometries, Materials, Meshes } from 'glaxier';
 import { Exposes } from 'glaxier/exposables';
 import { Cameras } from 'glaxier/cameras';
 import * as THREE from 'three';
@@ -13,9 +13,8 @@ export function render() {
         fov: 50,
         aspect: 0.5 * aspect,
         near: 1,
-        far: 10000
-    });
-    camera.position.z = 2500;
+        far: 10000,
+    }, { position: { z: 2500 } });
 
     const cameraPerspective = Cameras.perspective({
         fov: 50,
@@ -49,26 +48,26 @@ export function render() {
     cameraRig.add(cameraPerspective);
     cameraRig.add(cameraOrtho);
 
-    const mesh = new THREE.Mesh(
-        new THREE.SphereBufferGeometry(100, 16, 8),
-        new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true })
+    const mesh = Meshes.mesh(
+        Geometries.sphereBuffer(100, 16, 8),
+        Materials.meshBasic({ color: 0xffffff, wireframe: true })
     );
 
-    const mesh2 = new THREE.Mesh(
-        new THREE.SphereBufferGeometry(50, 16, 8),
-        new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true })
+    const mesh2 = Meshes.mesh(
+        Geometries.sphereBuffer(50, 16, 8),
+        Materials.meshBasic({ color: 0x00ff00, wireframe: true }),
+        { position: { y: 150 } }
     );
-    mesh2.position.y = 150;
     mesh.add(mesh2);
 
-    var mesh3 = new THREE.Mesh(
-        new THREE.SphereBufferGeometry(5, 16, 8),
-        new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true })
+    var mesh3 = Meshes.mesh(
+        Geometries.sphereBuffer(5, 16, 8),
+        Materials.meshBasic({ color: 0x0000ff, wireframe: true }),
+        { position: { z: 150 } }
     );
-    mesh3.position.z = 150;
     cameraRig.add(mesh3);
 
-    const geometry = new THREE.BufferGeometry(),
+    const geometry = Geometries.buffer(),
         vertices = [];
 
     for (let i = 0; i < 10000; i++) {
@@ -100,13 +99,13 @@ export function render() {
 
             autoResize(this, aspect => {
                 renderer.setSize(window.innerWidth, window.innerHeight);
-        
+
                 camera.aspect = 0.5 * aspect;
                 camera.updateProjectionMatrix();
-        
+
                 cameraPerspective.aspect = 0.5 * aspect;
                 cameraPerspective.updateProjectionMatrix();
-        
+
                 cameraOrtho.left = - 0.5 * frustumSize * aspect / 2;
                 cameraOrtho.right = 0.5 * frustumSize * aspect / 2;
                 cameraOrtho.top = frustumSize / 2;
@@ -116,11 +115,11 @@ export function render() {
             autoKeySwitch(this, {
                 "O": {
                     activeCamera: cameraOrtho,
-					activeHelper: cameraOrthoHelper
+                    activeHelper: cameraOrthoHelper
                 },
                 "P": {
                     activeCamera: cameraPerspective,
-					activeHelper: cameraPerspectiveHelper
+                    activeHelper: cameraPerspectiveHelper
                 }
             });
         },

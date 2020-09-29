@@ -15,10 +15,24 @@ export interface Vector3Options {
     z?: number;
 }
 
+export interface Object3DOptions {
+    position?: Vector3Options;
+    rotation?: Vector3Options;
+}
+
 export class Utils {
     static readonly stagingFile = path.resolve(__dirname, '..', 'dist', 'stage.html');
     private static readonly defaultDirs = ['dist', 'dist/scenes'];
     private static readonly registeredDirs = [];
+
+    static configure(object, config) {
+        if(config) {
+            Object.entries(config).forEach(([prop, options]) => {
+                Object.assign(object[prop], options);
+            });
+        }
+        return object;
+    }
 
     static stage(html) {
         fs.writeFileSync(this.stagingFile, html);
