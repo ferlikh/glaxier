@@ -63,7 +63,6 @@ export const DEFAULT_GREY = 0x9e9e9e;
 export function render() {
     const camera = Cameras.perspective({
         fov:75, 
-        aspect: window.innerWidth / window.innerHeight, 
         near: 0.1, 
         far: 1000
     });

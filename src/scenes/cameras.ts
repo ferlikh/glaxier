@@ -1,5 +1,6 @@
 import { autoKeySwitch, autoResize } from 'glaxier';
 import { Exposes } from 'glaxier/exposables';
+import { Cameras } from 'glaxier/cameras';
 import * as THREE from 'three';
 
 export function render() {
@@ -8,13 +9,30 @@ export function render() {
 
     let aspect = window.innerWidth / window.innerHeight, frustumSize = 600;
 
-    const camera = new THREE.PerspectiveCamera(50, 0.5 * aspect, 1, 10000);
+    const camera = Cameras.perspective({
+        fov: 50,
+        aspect: 0.5 * aspect,
+        near: 1,
+        far: 10000
+    });
     camera.position.z = 2500;
 
-    const cameraPerspective = new THREE.PerspectiveCamera(50, 0.5 * aspect, 150, 1000);
+    const cameraPerspective = Cameras.perspective({
+        fov: 50,
+        aspect: 0.5 * aspect,
+        near: 150,
+        far: 1000
+    });
     const cameraPerspectiveHelper = new THREE.CameraHelper(cameraPerspective);
 
-    const cameraOrtho = new THREE.OrthographicCamera(0.5 * frustumSize * aspect / - 2, 0.5 * frustumSize * aspect / 2, frustumSize / 2, frustumSize / - 2, 150, 1000);
+    const cameraOrtho = Cameras.orthographic({
+        left: 0.5 * frustumSize * aspect / - 2,
+        right: 0.5 * frustumSize * aspect / 2,
+        top: frustumSize / 2,
+        bottom: frustumSize / - 2,
+        near: 150,
+        far: 1000
+    });
     const cameraOrthoHelper = new THREE.CameraHelper(cameraOrtho);
 
     let activeCamera, activeHelper;
@@ -69,12 +87,12 @@ export function render() {
 
     return {
         container,
+        renderer,
         objects: [cameraPerspectiveHelper, cameraOrthoHelper, cameraRig, mesh, particles],
         props: {
             activeCamera: Exposes.prop(camera => activeCamera = camera, () => activeCamera),
             activeHelper: Exposes.prop(helper => activeHelper = helper, () => activeHelper),
         },
-        renderer,
         setup: function () {
             renderer.setPixelRatio(window.devicePixelRatio);
             renderer.setSize(window.innerWidth, window.innerHeight);
