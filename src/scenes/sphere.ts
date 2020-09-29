@@ -1,4 +1,4 @@
-import { autoExpose, autoResize, autoVRButton, Cameras, Geometries, Materials, mesh } from 'glaxier';
+import { autoExpose, autoResize, autoVRButton, Cameras, Geometries, Materials, Meshes } from 'glaxier';
 import * as THREE from 'three';
 let rotationSpeed = 1;
 const DEFAULT_GREY = 0x9e9e9e;
@@ -15,7 +15,7 @@ export function render() {
     const wireframe = new THREE.WireframeGeometry( geometry );
  
     const line = new THREE.LineSegments( wireframe, material );
-    const sphere = mesh(geometry, material);
+    const sphere = Meshes.mesh(geometry, material);
     // line.material.depthTest = false;
     //line.material.opacity = 0.25;
     // line.material.transparent = false;

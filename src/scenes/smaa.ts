@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { Meshes } from 'glaxier/meshes';
 import { Stats, SMAAPass } from 'glaxier/externals';
 import { autoResize } from 'glaxier';
 
@@ -10,18 +11,19 @@ export function render() {
     camera.position.z = 300;
 
     const geometry = new THREE.BoxBufferGeometry(120, 120, 120);
-    const material1 = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
 
-    const mesh1 = new THREE.Mesh(geometry, material1);
-    mesh1.position.x = - 100;
+    const wireframeMesh = Meshes.mesh(
+        geometry, new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true }), 
+        { position: { x: -100 } }
+    );
 
     const texture = new THREE.TextureLoader().load("textures/brick_diffuse.jpg");
     texture.anisotropy = 4;
 
-    const material2 = new THREE.MeshBasicMaterial({ map: texture });
-
-    const mesh2 = new THREE.Mesh(geometry, material2);
-    mesh2.position.x = 100;
+    const textureMesh = Meshes.mesh(
+        geometry, new THREE.MeshBasicMaterial({ map: texture }),
+        { position: { x: 100 } }
+    );
 
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -33,7 +35,7 @@ export function render() {
         camera,
         renderer,
         effects: [smaaPass],
-        objects: [mesh1, mesh2],
+        objects: [wireframeMesh, textureMesh],
         setup: function () {
             document.body.appendChild(stats.dom);
             autoResize(this);

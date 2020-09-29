@@ -1,4 +1,4 @@
-import { autoExpose, autoResize, autoVRButton, Cameras, Geometries, Materials, mesh } from 'glaxier';
+import { autoExpose, autoResize, autoVRButton, Cameras, Geometries, Materials, Meshes } from 'glaxier';
 let rotationSpeed = 1;
 const DEFAULT_GREY = 0x9e9e9e;
 
@@ -11,7 +11,7 @@ export function render() {
     });
     const geometry = Geometries.box();
     const material = Materials.meshBasic({ color: DEFAULT_GREY });
-    const cube = mesh(geometry, material);
+    const cube = Meshes.mesh(geometry, material);
     return {
         camera, 
         objects: [ cube ],
