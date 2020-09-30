@@ -1,14 +1,14 @@
 import * as THREE from 'three';
 import { Utils, Object3DOptions } from './utils';
 
-export interface PerspectiveCameraOptions {
+export interface PerspectiveCameraOptions extends Object3DOptions {
     fov: number;
     aspect?: number;
     near: number;
     far: number;
 }
 
-export interface OrthographicCameraOptions {
+export interface OrthographicCameraOptions extends Object3DOptions {
     left: number;
     right: number;
     top: number;
@@ -18,7 +18,7 @@ export interface OrthographicCameraOptions {
 }
 
 export class Cameras {
-    static perspective(options: PerspectiveCameraOptions, config?: Object3DOptions) {
+    static perspective(options: PerspectiveCameraOptions) {
         options.aspect = options.aspect ?? (window.innerWidth / window.innerHeight);
         const camera = new THREE.PerspectiveCamera(
             options.fov,
@@ -26,10 +26,10 @@ export class Cameras {
             options.near,
             options.far
         );
-        return Utils.configure(camera, config);
+        return Utils.configure(camera, options);
     }
 
-    static orthographic(options: OrthographicCameraOptions, config?: Object3DOptions) {
+    static orthographic(options: OrthographicCameraOptions) {
         const camera = new THREE.OrthographicCamera(
             options.left,
             options.right,
@@ -38,6 +38,6 @@ export class Cameras {
             options.near,
             options.far
         );
-        return Utils.configure(camera, config);
+        return Utils.configure(camera, options);
     }
 }

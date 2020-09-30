@@ -20,6 +20,11 @@ export interface Object3DOptions {
     rotation?: Vector3Options;
 }
 
+const Object3DOptionsMap = ['position', 'rotation'].reduce((dict, prop) => {
+    dict[prop] = true;
+    return dict;
+}, {});
+
 export class Utils {
     static readonly stagingFile = path.resolve(__dirname, '..', 'dist', 'stage.html');
     private static readonly defaultDirs = ['dist', 'dist/scenes'];
@@ -27,7 +32,7 @@ export class Utils {
 
     static configure(object, config) {
         if (config) {
-            Object.entries(config).forEach(([prop, options]) => {
+            Object.entries(config).filter(([prop,]) => Object3DOptionsMap[prop]).forEach(([prop, options]) => {
                 Object.assign(object[prop], options);
             });
         }

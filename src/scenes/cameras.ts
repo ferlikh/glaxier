@@ -14,7 +14,8 @@ export function render() {
         aspect: 0.5 * aspect,
         near: 1,
         far: 10000,
-    }, { position: { z: 2500 } });
+        position: { z: 2500 }
+    });
 
     const cameraPerspective = Cameras.perspective({
         fov: 50,
