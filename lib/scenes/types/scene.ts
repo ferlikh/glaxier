@@ -16,6 +16,7 @@ export interface SceneOptions {
     loop?: Function;
     setup?: Function;
     attached?: boolean;
+    title?: string;
     container?: HTMLElement;
 }
 
@@ -103,6 +104,11 @@ export class Scene {
             if (this.setup) this.setup.call(this);
             const renderer = this.renderer as THREE.WebGLRenderer;
             renderer.setAnimationLoop(this.loop.bind(this));
+            if(this.options.title) {
+                let title = document.querySelector('head title');
+                title = title ?? document.head.appendChild(document.createElement('title'));
+                title.innerHTML = this.options.title;
+            }
             const container = this.container ?? document.body;
             container.appendChild(this.renderer.domElement);
             this._attached = true;

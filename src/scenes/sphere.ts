@@ -38,6 +38,6 @@ export function render() {
             // sphere.rotation.y += 0.01;
             this.renderer.render(this.scene, this.camera);
         },
-        // attached: true,
+        title: 'Sphere'
     }
 }

@@ -90,6 +90,7 @@ export function render() {
             const delta = clock.getDelta();
             group.rotation.y += delta * rotationSpeed;
             this.composer.render(delta);
-        }
+        },
+        title: 'Halftone'
     }
 }

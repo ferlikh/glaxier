@@ -34,6 +34,11 @@ export class WindowManager {
             const { src } = config;
             WindowManager.loadHTML(win, src);
         }
+
+        // win.once('ready-to-show', () => {
+        //     win.show()
+        // });
+
         return win;
     }
 

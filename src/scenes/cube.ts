@@ -28,6 +28,6 @@ export function render() {
             cube.rotation.y += 0.01 * rotationSpeed;
             this.renderer.render(this.scene, this.camera);
         },
-        attached: true,
+        title: 'Cube'
     }
 }

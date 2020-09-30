@@ -51,6 +51,7 @@ export function render() {
             mesh.rotation.x -= delta;
             mesh.rotation.y += delta;
             this.composer.render();
-        }
+        },
+        title: 'Torus Knot'
     }
 }

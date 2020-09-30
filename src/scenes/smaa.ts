@@ -55,6 +55,7 @@ export function render() {
 
             composer.render();
             stats.end();
-        }
+        },
+        title: 'SMAA'
     }
 }

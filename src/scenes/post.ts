@@ -51,6 +51,7 @@ export function render() {
             object.rotation.y += 0.01;
 
             this.composer.render();
-        }
+        },
+        title: 'Postprocessing'
     }
 }

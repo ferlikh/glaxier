@@ -42,7 +42,9 @@ export default class Scenes {
         const setups = [setup];
         const effects = scene.effects? [...scene.effects]: [];
         const objects = scene.objects? [...scene.objects]: [];
+        const options = Scenes.isScene(scene)? scene.options: scene;
         return new CompositeScene({
+            ...options,
             camera, effects, objects, loops, setups,
         });
     }

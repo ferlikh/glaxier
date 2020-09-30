@@ -79,7 +79,8 @@ export function render() {
 
             renderer.clear();
             composer.render(time);
-        }
+        },
+        title: 'Mask(s)'
     }
 
 }

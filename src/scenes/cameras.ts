@@ -169,7 +169,8 @@ export function render() {
 
             renderer.setViewport(window.innerWidth / 2, 0, window.innerWidth / 2, window.innerHeight);
             renderer.render(this.scene, camera);
-        }
+        },
+        title: 'Cameras'
     }
 
 }
