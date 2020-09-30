@@ -107,6 +107,7 @@ export class Scene {
             container.appendChild(this.renderer.domElement);
             this._attached = true;
         }
+        return this;
     }
 }
 

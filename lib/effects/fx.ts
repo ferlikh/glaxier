@@ -1,4 +1,5 @@
 import { glitchEffect } from "./glitch";
+import { grayEffect } from "./gray";
 import { sobelEffect } from "./sobel";
 
 /**
@@ -9,6 +10,10 @@ export default class FX {
 
     static glitch(scene) {
         return glitchEffect(scene);
+    }
+
+    static gray(scene) {
+        return grayEffect(scene);
     }
 
     static sobel(scene) {

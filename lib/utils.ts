@@ -26,7 +26,7 @@ export class Utils {
     private static readonly registeredDirs = [];
 
     static configure(object, config) {
-        if(config) {
+        if (config) {
             Object.entries(config).forEach(([prop, options]) => {
                 Object.assign(object[prop], options);
             });
@@ -47,7 +47,7 @@ export class Utils {
         for (const dir of dirs) {
             const pathname = path.resolve(dir, file);
             if (fs.existsSync(pathname)) {
-                const relativePath =  './' + path.relative(path.resolve(__dirname, '../dist'), pathname).replace(/\b\\\b/g, '/'); // for module type script tags
+                const relativePath = './' + path.relative(path.resolve(__dirname, '../dist'), pathname).replace(/\b\\\b/g, '/'); // for module type script tags
                 const moduleImport = relativePath.replace(/\.js$/, ''); // for require
                 const scriptSrc = relativePath.replace(/^\.\//, ''); // for non module script tags
                 return { relativePath, moduleImport, scriptSrc };
@@ -56,7 +56,30 @@ export class Utils {
         return {};
     }
 
+    static stageTemplate(transform, scriptSrc) {
+        return htmlTemplate(scriptSrc, `$scene = ${transform}(render()).attach();`)
+    }
+
 }
+
+const htmlTemplate = (scriptSrc, code) => `
+<html>
+    <head>
+        <title>Rendered Scene</title>
+        <style>
+            body { margin: 0; }
+            canvas { display: block; }
+        </style>
+    </head>
+    <body>
+        <script src="dist://vendors.js"></script>
+        <script src="dist://renderer-lib.js"></script>
+        <script src="dist://${scriptSrc}"></script>
+        <script>
+            ${code}
+        </script>
+    </body>
+</html>`
 
 export class ObjectParser {
     static parse(value) {
