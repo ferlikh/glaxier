@@ -2,32 +2,13 @@ import fs from 'fs';
 import path from 'path';
 import { BrowserWindow } from 'electron';
 
-export interface Settable {
-    set(value: any);
-}
-
-export interface Valuable {
-    value: any;
-}
-
-export interface Vector3Options {
-    x?: number;
-    y?: number;
-    z?: number;
-}
-
-export interface Object3DOptions {
-    position?: Vector3Options;
-    rotation?: Vector3Options;
-}
-
 const Object3DOptionsMap = ['position', 'rotation'].reduce((dict, prop) => {
     dict[prop] = true;
     return dict;
 }, {});
 
 export class Utils {
-    static readonly stagingFile = path.resolve(__dirname, '..', 'dist', 'stage.html');
+    static readonly stagingFile = path.resolve('dist', 'stage.html');
     private static readonly defaultDirs = ['dist', 'dist/scenes'];
     private static readonly registeredDirs = [];
 
