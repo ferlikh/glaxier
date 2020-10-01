@@ -61,18 +61,20 @@ export default class Scenes {
         });
     }
 
-    static run(transform: string, scene: string | BrowserWindow, window?: BrowserWindow) {
-        if(scene instanceof BrowserWindow) {
+    static run(transform: string, scene: string | BrowserWindow | Promise<BrowserWindow>, window?: BrowserWindow) {
+        if(scene instanceof BrowserWindow || scene instanceof Promise) {
             const code = `$scene = Scenes.reassemble($scene, '${transform}').attach(); (void 0)`;
             return Utils.runInWindow(scene, code);
         }
-        const { scriptSrc } = Scenes.lookup(scene);
-        if(!scriptSrc) {
-            console.error(`${scene} not found`);
-            return;
+        else {
+            const { scriptSrc } = Scenes.lookup(scene);
+            if(!scriptSrc) {
+                console.error(`${scene} not found`);
+                return;
+            }
+            Utils.stage( Scenes.template(transform, scriptSrc) );
+            return WindowManager.load(scene, window);
         }
-        Utils.stage( Scenes.template(transform, scriptSrc) );
-        return WindowManager.load(scene, window);
     }
 
     static stage(scene: SceneObject) {

@@ -62,7 +62,9 @@ export class Utils {
         return {};
     }
 
-    static runInWindow(window: BrowserWindow, code: string) { 
+    static runInWindow(window: BrowserWindow | Promise<BrowserWindow>, code: string) {
+        if(window instanceof Promise) 
+            return window.then(window => Utils.runInWindow(window, code)); 
         return window.webContents.executeJavaScript(code).then(() => window);
     }
 
