@@ -1,7 +1,5 @@
 import Effects from './effects';
-import { LuminosityShader, SobelOperatorShader, ShaderPass, SceneObject, SceneOptions, Scenes, Utils, WindowManager } from 'glaxier';
-
-const sobelStage = scriptSrc => Utils.stageTemplate('FX.sobel', scriptSrc);
+import { LuminosityShader, SobelOperatorShader, ShaderPass, SceneObject, SceneOptions, Scenes } from 'glaxier';
 
 function sobelOptions(options: SceneOptions) {
     const effectGrayScale = new ShaderPass( LuminosityShader );
@@ -16,7 +14,5 @@ export function sobelEffect(scene: SceneObject) {
 }
 
 export function sobelPass(scene, window?) {
-    const { scriptSrc } = Scenes.lookup(scene)
-    Utils.stage(sobelStage(scriptSrc));
-    return WindowManager.load(scene, window);
+    return Scenes.run('FX.sobel', scene, window);
 }

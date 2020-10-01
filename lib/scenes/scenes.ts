@@ -4,6 +4,8 @@ import { CompositeScene, CompositeSceneOptions } from './types/composite';
 import { MultiScene, MultiSceneOptions } from './types/multi';
 import { Utils } from 'glaxier';
 import { Symbols } from 'glaxier/symbols';
+import { BrowserWindow } from 'electron';
+import { WindowManager } from 'glaxier/window-manager';
 
 export default class Scenes {
     static readonly sceneKey = Symbols.SCENE;
@@ -36,8 +38,6 @@ export default class Scenes {
         return Utils.lookup(fileName);
     }
 
-    
-
     static compose(...scenes) {
         let camera, container;
         const effects = [], objects = [], props = {}, loops = [], setups = [];
@@ -59,6 +59,16 @@ export default class Scenes {
             attached: true, container,
             camera, effects, objects, props, loops, setups,
         });
+    }
+
+    static run(transform: string, scene: string, window?: BrowserWindow) {
+        const { scriptSrc } = Scenes.lookup(scene);
+        if(!scriptSrc) {
+            console.error(`${scene} not found`);
+        }
+        const template = Utils.stageTemplate(transform, scriptSrc);
+        Utils.stage(template);
+        return WindowManager.load(scene, window);
     }
 
     static stage(scene: SceneObject) {
