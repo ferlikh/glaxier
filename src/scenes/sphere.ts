@@ -1,4 +1,4 @@
-import { autoExpose, autoResize, autoVRButton, Cameras, Geometries, Materials, Meshes } from 'glaxier';
+import { autoExpose, autoResize, autoVRButton, Cameras, Geometries, Materials, Meshes, Tools } from 'glaxier';
 import * as THREE from 'three';
 let rotationSpeed = 1;
 const DEFAULT_GREY = 0x9e9e9e;
@@ -21,7 +21,7 @@ export function render() {
     // line.material.transparent = false;
 
     return {
-        camera, 
+        camera,
         objects: [ line ],
         setup: function() {
             console.log('sphere setup')
@@ -38,6 +38,7 @@ export function render() {
             // sphere.rotation.y += 0.01;
             this.renderer.render(this.scene, this.camera);
         },
+        renderer: Tools.renderer(),
         title: 'Sphere'
     }
 }

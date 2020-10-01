@@ -34,7 +34,7 @@ export class Utils {
         for (const dir of dirs) {
             const pathname = path.resolve(dir, file);
             if (fs.existsSync(pathname)) {
-                const relativePath = './' + path.relative(path.resolve(__dirname, '../dist'), pathname).replace(/\b\\\b/g, '/'); // for module type script tags
+                const relativePath = './' + path.relative(path.resolve('dist'), pathname).replace(/\b\\\b/g, '/'); // for module type script tags
                 const moduleImport = relativePath.replace(/\.js$/, ''); // for require
                 const scriptSrc = relativePath.replace(/^\.\//, ''); // for non module script tags
                 return { relativePath, moduleImport, scriptSrc };

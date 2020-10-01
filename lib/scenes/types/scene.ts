@@ -1,4 +1,4 @@
-import { EffectComposer, Pass, RenderPass, OrbitControls } from 'glaxier';
+import { EffectComposer, Pass, RenderPass, OrbitControls, Tools } from 'glaxier';
 import { Symbols } from 'glaxier/symbols';
 import * as THREE from 'three';
 
@@ -66,8 +66,7 @@ export class Scene {
             this.renderer = renderer;
         }
         else {
-            this.renderer = new THREE.WebGLRenderer;
-            this.renderer.setSize(window.innerWidth, window.innerHeight);
+            this.renderer = Tools.renderer();
         }
 
         this.camera = camera;

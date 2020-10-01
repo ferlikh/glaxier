@@ -7,6 +7,7 @@ export * from './materials';
 export * from './meshes';
 export * from './scenes';
 // export * from './symbols'; // symbols not exposed
+export * from './tools';
 export * from './utils';
 export * from './windows';
 export * from './window-manager';
