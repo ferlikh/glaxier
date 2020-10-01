@@ -36,18 +36,7 @@ export default class Scenes {
         return Utils.lookup(fileName);
     }
 
-    static toComposite(scene: SceneObject) {
-        const { camera, loop, setup } = scene;
-        const loops = [loop];
-        const setups = [setup];
-        const effects = scene.effects? [...scene.effects]: [];
-        const objects = scene.objects? [...scene.objects]: [];
-        const options = Scenes.isScene(scene)? scene.options: scene;
-        return new CompositeScene({
-            ...options,
-            camera, effects, objects, loops, setups,
-        });
-    }
+    
 
     static compose(...scenes) {
         let camera, container;
@@ -72,8 +61,30 @@ export default class Scenes {
         });
     }
 
+    static stage(scene: SceneObject) {
+        return Scenes.augment(scene, { controls: true });
+    }
+
+    static toComposite(scene: SceneObject) {
+        const { camera, loop, setup } = scene;
+        const loops = [loop];
+        const setups = [setup];
+        const effects = scene.effects? [...scene.effects]: [];
+        const objects = scene.objects? [...scene.objects]: [];
+        const options = Scenes.isScene(scene)? scene.options: scene;
+        return new CompositeScene({
+            ...options,
+            camera, effects, objects, loops, setups,
+        });
+    }
+
+    private static augment(scene: SceneObject, options: SceneOptions) {
+        return Scenes.create({ ...(Scenes.isScene(scene)? scene.options: scene), ...options });
+    }
+
     private static compile(scenes): SceneObject[] {
         const sources = scenes.map(scene => Scenes.lookup(scene).moduleImport);
         return eval("[" + sources.map(source => `require('${source}').render()`).join(', ') + "]");
     }
+    
 }

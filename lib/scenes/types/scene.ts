@@ -1,4 +1,4 @@
-import { EffectComposer, Pass, RenderPass } from 'glaxier';
+import { EffectComposer, Pass, RenderPass, OrbitControls } from 'glaxier';
 import { Symbols } from 'glaxier/symbols';
 import * as THREE from 'three';
 
@@ -13,6 +13,7 @@ export interface SceneOptions {
     props?: Props;
     composer?: EffectComposer;
     renderer?: THREE.Renderer;
+    controls?: any;
     loop?: Function;
     setup?: Function;
     attached?: boolean;
@@ -22,8 +23,8 @@ export interface SceneOptions {
 
 const INVALID_PROPS_REGISTRY = ['__scn__', 'scene', 'scenes',
     'setup', 'setups', 'loop', 'loops', '_attached', 'attached',
-    'renderer', 'container', 'camera', 'objects', 'effects', 'props', 'options',
-    'lights', 'meshes', 'attach'].reduce((dict, propName) => {
+    'renderer', 'container', 'camera', 'objects', 'effects', 'props', 
+    'controls', 'options', 'lights', 'meshes', 'attach'].reduce((dict, propName) => {
         dict[propName] = true;
         return dict;
     }, {});
@@ -37,6 +38,7 @@ export class Scene {
     readonly effects: Pass[];
     readonly objects: THREE.Object3D[];
     readonly props: Props;
+    readonly controls: any;
     readonly loop: Function;
     readonly setup: Function;
     readonly container?: HTMLElement;
@@ -52,7 +54,7 @@ export class Scene {
 
     constructor(readonly options: SceneOptions) {
         const scene = this.scene = new THREE.Scene;
-        const { renderer, composer, camera, objects, effects, props, setup, loop, attached, container } = options;
+        const { renderer, composer, camera, objects, effects, props, controls, setup, loop, attached, container } = options;
 
         if (props) {
             this.props = props;
@@ -83,6 +85,16 @@ export class Scene {
         }
         else if(composer) {
             this.composer = composer;
+        }
+
+        if(controls) {
+            if(typeof controls !== 'boolean') {
+                this.controls = controls;
+            }
+            else {
+                if(!camera) throw new Error('camera is undefined');
+                this.controls = new OrbitControls(camera, this.renderer.domElement);
+            }
         }
 
         // Attach the setup + animation loop
