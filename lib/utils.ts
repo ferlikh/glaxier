@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { BrowserWindow } from 'electron';
 
 export interface Settable {
     set(value: any);
@@ -61,30 +62,11 @@ export class Utils {
         return {};
     }
 
-    static stageTemplate(transform, scriptSrc) {
-        return htmlTemplate(scriptSrc, `$scene = ${transform}(render()).attach();`)
+    static runInWindow(window: BrowserWindow, code: string) { 
+        return window.webContents.executeJavaScript(code).then(() => window);
     }
 
 }
-
-const htmlTemplate = (scriptSrc, code) => `
-<html>
-    <head>
-        <title>Rendered Scene</title>
-        <style>
-            body { margin: 0; }
-            canvas { display: block; }
-        </style>
-    </head>
-    <body>
-        <script src="dist://vendors.js"></script>
-        <script src="dist://renderer-lib.js"></script>
-        <script src="dist://${scriptSrc}"></script>
-        <script>
-            ${code}
-        </script>
-    </body>
-</html>`
 
 export class ObjectParser {
     static parse(value) {

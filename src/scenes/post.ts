@@ -33,6 +33,10 @@ export function render() {
     const dotScale = Exposes.prop(effect1.uniforms.scale);
     const rgbShiftAmount = Exposes.prop(effect2.uniforms.amount);
 
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
     return {
         camera,
         effects: [effect1, effect2],
@@ -40,9 +44,8 @@ export function render() {
         props: {
             dotScale, rgbShiftAmount
         },
+        renderer,
         setup: function () {
-            this.renderer.setPixelRatio(window.devicePixelRatio);
-            this.renderer.setSize(window.innerWidth, window.innerHeight);
             this.scene.fog = new THREE.Fog( 0x000000, 1, 1000 );
             autoResize(this);
         },

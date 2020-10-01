@@ -6,6 +6,8 @@ export class ComposableScene extends Scene {
 
 }
 
+export type CompositeSceneObject = (CompositeScene | CompositeSceneOptions);
+
 export interface CompositeSceneOptions extends SceneOptions {
     loops: Function[];
     setups: Function[];
@@ -29,7 +31,9 @@ export class CompositeScene extends ComposableScene {
 
         const setup = function () {
             const setups = options.setups.slice();
-            while (setups.length) setups.shift().call(this);
+            while (setups.length) { 
+                setups.shift().call(this);
+            }
         }
 
         const loop = function () {

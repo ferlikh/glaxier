@@ -127,5 +127,14 @@ export class Scene {
         }
         return this;
     }
+
+    detach() {
+        if(this.attached) {
+            const container = this.container ?? document.body;
+            container.removeChild(this.renderer.domElement);
+            this._attached = false;
+        }
+        return this.options;
+    }
 }
 

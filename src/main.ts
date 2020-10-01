@@ -83,7 +83,7 @@ process.on('message', msg => {
             }
             else if (data instanceof Promise) {
                 data.then(value => {
-                    process.send({ data: value });
+                    process.send({ data: ObjectParser.parse(value) });
                 }, err => {
                     console.error(err);
                     process.send({ err });

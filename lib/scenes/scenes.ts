@@ -1,6 +1,6 @@
 import path from 'path';
 import { SceneOptions, Scene, SceneObject } from './types/scene';
-import { CompositeScene, CompositeSceneOptions } from './types/composite';
+import { CompositeScene, CompositeSceneOptions, CompositeSceneObject } from './types/composite';
 import { MultiScene, MultiSceneOptions } from './types/multi';
 import { Utils } from 'glaxier';
 import { Symbols } from 'glaxier/symbols';
@@ -61,13 +61,17 @@ export default class Scenes {
         });
     }
 
-    static run(transform: string, scene: string, window?: BrowserWindow) {
+    static run(transform: string, scene: string | BrowserWindow, window?: BrowserWindow) {
+        if(scene instanceof BrowserWindow) {
+            const code = `$scene = Scenes.reassemble($scene, '${transform}').attach(); (void 0)`;
+            return Utils.runInWindow(scene, code);
+        }
         const { scriptSrc } = Scenes.lookup(scene);
         if(!scriptSrc) {
             console.error(`${scene} not found`);
+            return;
         }
-        const template = Utils.stageTemplate(transform, scriptSrc);
-        Utils.stage(template);
+        Utils.stage( Scenes.template(transform, scriptSrc) );
         return WindowManager.load(scene, window);
     }
 
@@ -75,10 +79,13 @@ export default class Scenes {
         return Scenes.augment(scene, { controls: true });
     }
 
-    static toComposite(scene: SceneObject) {
+    static toComposite(scene: SceneObject | CompositeSceneObject) {
+        if('loops' in scene) return new CompositeScene(scene);
+        else if ('options' in scene && 'loops' in scene.options) return scene;
+
         const { camera, loop, setup } = scene;
         const loops = [loop];
-        const setups = [setup];
+        const setups = setup? [setup]: [];
         const effects = scene.effects? [...scene.effects]: [];
         const objects = scene.objects? [...scene.objects]: [];
         const options = Scenes.isScene(scene)? scene.options: scene;
@@ -96,5 +103,33 @@ export default class Scenes {
         const sources = scenes.map(scene => Scenes.lookup(scene).moduleImport);
         return eval("[" + sources.map(source => `require('${source}').render()`).join(', ') + "]");
     }
-    
+
+    private static reassemble(scene: Scene, transform: string) {
+        if(!transform.match(/^\w+\.\w+$/)) return;
+        const options = scene.detach();
+        return eval(transform)({ ...options, setup: undefined, setups: [] });
+    }
+
+    private static template(transform, src) {
+        return sceneTemplate(src, `$scene = ${transform}(render()).attach();`);
+    }
 }
+
+const sceneTemplate = (scriptSrc, code) => `
+<html>
+    <head>
+        <title>Rendered Scene</title>
+        <style>
+            body { margin: 0; }
+            canvas { display: block; }
+        </style>
+    </head>
+    <body>
+        <script src="dist://vendors.js"></script>
+        <script src="dist://renderer-lib.js"></script>
+        <script src="dist://${scriptSrc}"></script>
+        <script>
+            ${code}
+        </script>
+    </body>
+</html>`
