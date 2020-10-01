@@ -132,9 +132,7 @@ module.exports = [
                 {
                     test: /\.(ts|tsx)$/,
                     include: [path.resolve('./lib'), path.resolve('./src/scenes/**/*')],
-                    use: {
-                        loader: 'ts-loader',
-                    },
+                    loader: 'ts-loader',
                 },
             ],
         },

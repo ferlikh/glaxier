@@ -4,6 +4,8 @@
 import StatsModule from 'three/examples/jsm/libs/stats.module';
 export { VRButton } from 'three/examples/jsm/webxr/VRButton';
 
+// controls
+export { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 // postprocessing (passes + composers)
 export { Pass } from 'three/examples/jsm/postprocessing/Pass';
