@@ -8,6 +8,48 @@ function globFiles(pattern) {
     )
 }
 
+function globFolder(dir) {
+    const { name } = path.parse(dir);
+    return {
+        resolve: {
+            extensions: ['.ts', '.tsx', '.js'],
+            modules: ['node_modules'],
+            alias: {
+                'glaxier': path.resolve('lib'),
+            }
+        },
+        devtool: 'inline-source-map',
+        entry: globFiles(dir + '*.ts'),
+        target: 'electron-renderer',
+        node: {
+            __dirname: true,
+            __filename: false
+        },
+        module: {
+            rules: [
+                {
+                    test: /\.(ts|tsx)$/,
+                    include: [path.resolve(dir)],
+                    loader: 'ts-loader',
+                },
+            ],
+        },
+        externals: {
+            glaxier: 'global'
+        },
+        output: {
+            path: path.resolve('dist'),
+            filename: `scenes/${name}/[name].js`,
+            libraryTarget: 'global',
+            globalObject: 'this',
+        },
+    };
+}
+
+function globFolders(dirs) {
+    return dirs.map(dir => globFolder(dir));
+}
+
 module.exports = [
     {
         resolve: {
@@ -131,7 +173,7 @@ module.exports = [
             rules: [
                 {
                     test: /\.(ts|tsx)$/,
-                    include: [path.resolve('./lib'), path.resolve('./src/scenes/**/*')],
+                    include: [path.resolve('./lib'), path.resolve('./src/scenes/*.ts')],
                     loader: 'ts-loader',
                 },
             ],
@@ -157,10 +199,11 @@ module.exports = [
             filename: (pathData) => {
                 const sceneDir = path.resolve('./src/scenes');
                 const isScene = pathData.chunk.entryModule.context === sceneDir;
-                return isScene ? 'scenes/[name].js': '[name].js';
-              },
+                return isScene ? 'scenes/[name].js' : '[name].js';
+            },
             libraryTarget: 'global',
             globalObject: 'this',
         },
     },
+    ...globFolders(glob.sync('./src/scenes/*/'))
 ]
