@@ -1,7 +1,6 @@
 /**
  * This file is to export vendor code for use within the library.
  */
-import StatsModule from 'three/examples/jsm/libs/stats.module';
 export { VRButton } from 'three/examples/jsm/webxr/VRButton';
 
 // controls
@@ -27,8 +26,3 @@ export { DotScreenShader } from 'three/examples/jsm/shaders/DotScreenShader';
 export { LuminosityShader } from 'three/examples/jsm/shaders/LuminosityShader';
 export { RGBShiftShader } from 'three/examples/jsm/shaders/RGBShiftShader';
 export { SobelOperatorShader } from 'three/examples/jsm/shaders/SobelOperatorShader';
-
-const Stats = (StatsModule as VoidFunction);
-export {
-    Stats
-}

@@ -101,7 +101,7 @@ export function render() {
             autoResize(this);
         },
         loop: function () {
-            renderer.render(this.scene, camera);
+            this.renderer.render(this.scene, camera);
         },
         title: 'Clipping - Intersection'
     }

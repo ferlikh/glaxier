@@ -1,7 +1,6 @@
 import * as THREE from 'three';
-import { Meshes } from 'glaxier/meshes';
-import { Stats, SMAAPass } from 'glaxier/externals';
-import { autoResize } from 'glaxier';
+import { Stats  } from 'glaxier/renderer';
+import { autoResize, Meshes, SMAAPass } from 'glaxier';
 
 export function render() {
     const renderer = new THREE.WebGLRenderer();

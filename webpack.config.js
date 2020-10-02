@@ -29,7 +29,7 @@ function globFolder(dir) {
             rules: [
                 {
                     test: /\.(ts|tsx)$/,
-                    include: [path.resolve(dir)],
+                    include: [path.resolve('./lib/renderer'), path.resolve(dir)],
                     loader: 'ts-loader',
                 },
             ],
