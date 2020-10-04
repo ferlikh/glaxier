@@ -78,7 +78,7 @@ export default class Scenes {
         }
     }
 
-    static stage(scene: SceneObject) {
+    static orbit(scene: SceneObject) {
         return Scenes.augment(scene, { controls: true });
     }
 
