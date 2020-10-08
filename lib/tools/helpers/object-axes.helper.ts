@@ -1,11 +1,15 @@
 import { AxesHelper, ArrowHelper, Raycaster, Vector3, Object3D } from 'three';
 
+const isEngaged = Symbol();
 export class ObjectAxesHelper extends AxesHelper {
     intersects: any;
     public readonly raycaster: Raycaster = new Raycaster;
     public readonly arrowHelpers: { x: ArrowHelper, y: ArrowHelper, z: ArrowHelper };
     get arrowHelpersList() {
         return [this.arrowHelpers.x, this.arrowHelpers.y, this.arrowHelpers.z];
+    }
+    get isEngaged() {
+        return this[isEngaged];
     }
     constructor() {
         super();
@@ -15,6 +19,7 @@ export class ObjectAxesHelper extends AxesHelper {
             headLength = 0.25,
             headWidth = 0.15;
 
+        this[isEngaged] = false;
         this.arrowHelpers = {
             x: new ArrowHelper(new Vector3(1, 0, 0), origin, length, 0xff0000, headLength, headWidth),
             y: new ArrowHelper(new Vector3(0, 1, 0), origin, length, 0x00ff00, headLength, headWidth),
@@ -59,5 +64,13 @@ export class ObjectAxesHelper extends AxesHelper {
         }
 
         return this.intersects;
+    }
+
+    disengage() {
+        this[isEngaged] = false;
+    }
+
+    engage() {
+        this[isEngaged] = true;
     }
 }
