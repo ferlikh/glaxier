@@ -12,7 +12,7 @@ export class Utils {
     private static readonly defaultDirs = ['dist', 'dist/scenes'];
     private static readonly registeredDirs = [];
 
-    static configure(object, config) {
+    static configure<T>(object: T, config) {
         if (config) {
             Object.entries(config).filter(([prop,]) => Object3DOptionsMap[prop]).forEach(([prop, options]) => {
                 Object.assign(object[prop], options);
