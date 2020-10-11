@@ -1,17 +1,25 @@
-import { AxesHelper, ArrowHelper, Raycaster, Vector3, Object3D } from 'three';
+import { MouseVector } from 'glaxier';
+import { AxesHelper, ArrowHelper, Vector3, Object3D } from 'three';
+import { GPUPicker } from './gpu.picker';
+
+interface IAxisIntersect {
+    axis: 'x' | 'y' | 'z';
+    x?: true;
+    y?: true;
+    z?: true;
+}
 
 const isEngaged = Symbol();
 export class ObjectAxesHelper extends AxesHelper {
-    intersects: any;
-    public readonly raycaster: Raycaster = new Raycaster;
-    public readonly arrowHelpers: { x: ArrowHelper, y: ArrowHelper, z: ArrowHelper };
-    get arrowHelpersList() {
-        return [this.arrowHelpers.x, this.arrowHelpers.y, this.arrowHelpers.z];
+    intersects: IAxisIntersect;
+    public readonly arrowHelperAxes: { x: ArrowHelper, y: ArrowHelper, z: ArrowHelper };
+    get arrowHelpers() {
+        return [this.arrowHelperAxes.x, this.arrowHelperAxes.y, this.arrowHelperAxes.z];
     }
     get isEngaged() {
         return this[isEngaged];
     }
-    constructor() {
+    constructor(private picker: GPUPicker) {
         super();
         const
             origin = new Vector3(0, 0, 0),
@@ -20,43 +28,43 @@ export class ObjectAxesHelper extends AxesHelper {
             headWidth = 0.15;
 
         this[isEngaged] = false;
-        this.arrowHelpers = {
+        this.arrowHelperAxes = {
             x: new ArrowHelper(new Vector3(1, 0, 0), origin, length, 0xff0000, headLength, headWidth),
             y: new ArrowHelper(new Vector3(0, 1, 0), origin, length, 0x00ff00, headLength, headWidth),
             z: new ArrowHelper(new Vector3(0, 0, 1), origin, length, 0x0000ff, headLength, headWidth),
         };
 
-        this.add(...this.arrowHelpersList);
+        this.add(...this.arrowHelpers);
         this.type = 'ObjectAxesHelper';
     }
 
-    private getAxisIntersected(arrowHelper: Object3D) {
-        switch (arrowHelper) {
-            case this.arrowHelpers.x:
-                return 'x';
-            case this.arrowHelpers.y:
-                return 'y';
-            case this.arrowHelpers.z:
-                return 'z';
-        }
+    disengage() {
+        this[isEngaged] = false;
     }
 
-    updateIntersections(mouse, camera) {
-        this.raycaster.setFromCamera(mouse, camera);
-        const
-            intersects = this.raycaster.intersectObjects(this.arrowHelpersList.map(arrow => arrow.children[1])),
-            hit = intersects[0];
+    engage() {
+        this[isEngaged] = true;
+    }
+    
+    updateIntersections(mouse: MouseVector) {
+        const { clientX, clientY } = mouse;
+        const pixelRatio = window.devicePixelRatio || 1.0;
+        const object = this.picker.pick(clientX * pixelRatio, clientY * pixelRatio, object => {
+            switch(object.parent){
+                case this.arrowHelperAxes.x:
+                case this.arrowHelperAxes.y:
+                case this.arrowHelperAxes.z:
+                    return true;
+            }
+            return false;
+        });
 
-        if (hit) {
-            const 
-                arrowHelper = hit.object.parent,
-                axis = this.getAxisIntersected(arrowHelper);
-                
+        if (object) {
+            const axis = this.getAxisIntersected(object.parent);
+
             this.intersects = {
                 axis,
-                x: axis === 'x',
-                y: axis === 'y',
-                z: axis === 'z',
+                [axis]: true
             };
         }
         else {
@@ -66,11 +74,14 @@ export class ObjectAxesHelper extends AxesHelper {
         return this.intersects;
     }
 
-    disengage() {
-        this[isEngaged] = false;
-    }
-
-    engage() {
-        this[isEngaged] = true;
+    private getAxisIntersected(arrowHelper: Object3D) {
+        switch (arrowHelper) {
+            case this.arrowHelperAxes.x:
+                return 'x';
+            case this.arrowHelperAxes.y:
+                return 'y';
+            case this.arrowHelperAxes.z:
+                return 'z';
+        }
     }
 }
