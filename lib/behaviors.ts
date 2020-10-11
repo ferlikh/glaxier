@@ -65,15 +65,27 @@ export const autoKeySwitch = (object, config, matchCase = false) => {
     });
 }
 
+export class MouseVector extends Vector2 {
+    clientX: number;
+    clientY: number;
+}
+
 export const autoMouse = scope => {
-    const mouse = new Vector2();
+    const mouse = new MouseVector();
     Object.defineProperty(scope, 'mouse', {
         value: mouse,
         enumerable: true
     });
+    // const 
+    //     canvas = scope.renderer.domElement,
+    //     rect = canvas.getBoundingClientRect();
     window.addEventListener('mousemove', event => {
         event.preventDefault();
         mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
         mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        mouse.clientX = event.clientX;
+        mouse.clientY = event.clientY;
+        // mouse.x = (event.clientX - rect.left) * canvas.width  / rect.width;
+        // mouse.y = (event.clientY - rect.top ) * canvas.height / rect.height;
     });
 }
