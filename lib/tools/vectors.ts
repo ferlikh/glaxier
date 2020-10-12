@@ -14,6 +14,8 @@ export class Vectors {
 
     static sign(v, d) {
         if(!v || !d) return 1;
+        else if(v.x === 0 && v.y === 0)
+            return d.x + d.y >= 0 ? +1 : -1;
         return v.dot(d) >= 0? +1: -1;
     }
 
