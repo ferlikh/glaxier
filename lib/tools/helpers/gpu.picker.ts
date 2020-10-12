@@ -36,8 +36,8 @@ export class GPUPicker {
         const currRenderTarget = renderer.getRenderTarget();
         const currClearColor = renderer.getClearColor();
         renderer.setRenderTarget(pickingTarget);
-        renderer.setClearColor(clearColor);
-        renderer.clear();
+        // renderer.setClearColor(clearColor);
+        // renderer.clear();
         renderer.render(emptyScene, camera);
         renderer.readRenderTargetPixels(pickingTarget, 0, 0, pickingTarget.width, pickingTarget.height, pixelBuffer);
         renderer.setRenderTarget(currRenderTarget);
