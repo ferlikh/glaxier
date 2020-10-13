@@ -5,18 +5,21 @@
 import { Vector2, Vector3 } from 'three';
 
 export class Vectors {
-    static distance(u: Vector2, v: Vector2, direction?: Vector2) {
-        const { x: x1, y: y1 } = u;
-        const { x: x2, y: y2 } = v;
+    static distance(u: Vector2, v: Vector2, basis?: Vector2) {
+        const 
+            { x: x1, y: y1 } = u,
+            { x: x2, y: y2 } = v;
         const dX = x2 - x1, dY = y2 - y1;
-        return Vectors.sign(direction, new Vector2(dX, dY)) * Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+
+        return Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2))
+            * Vectors.sign(basis, new Vector2(dX, dY));
     }
 
-    static sign(v, d) {
-        if(!v || !d) return 1;
-        else if(v.x === 0 && v.y === 0)
-            return d.x + d.y >= 0 ? +1 : -1;
-        return v.dot(d) >= 0? +1: -1;
+    static sign(src, dest) {
+        if (!dest) return 1;
+        else if (!src || (src.x === 0 || src.y === 0)) 
+            return dest.x + dest.y >= 0 ? +1 : -1;
+        return src.dot(dest) >= 0 ? +1 : -1;
     }
 
     static unit(axis: 'x' | 'y' | 'z') {
