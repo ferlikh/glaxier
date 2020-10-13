@@ -1,5 +1,6 @@
-import { EffectComposer, Pass, RenderPass, OrbitControls, Tools } from 'glaxier';
+import { RESERVED_KEYWORDS } from '../schema/keywords';
 import { Symbols } from 'glaxier/symbols';
+import { EffectComposer, Pass, RenderPass, OrbitControls, Tools } from 'glaxier';
 import * as THREE from 'three';
 
 export type SceneObject = (Scene | SceneOptions);
@@ -20,14 +21,6 @@ export interface SceneOptions {
     title?: string;
     container?: HTMLElement;
 }
-
-const INVALID_PROPS_REGISTRY = ['__scn__', 'scene', 'scenes',
-    'setup', 'setups', 'loop', 'loops', '_attached', 'attached',
-    'renderer', 'container', 'camera', 'objects', 'effects', 'props', 
-    'controls', 'options', 'lights', 'meshes', 'attach'].reduce((dict, propName) => {
-        dict[propName] = true;
-        return dict;
-    }, {});
 
 export class Scene {
     readonly __scn__ = Symbols.SCENE;
@@ -58,7 +51,7 @@ export class Scene {
 
         if (props) {
             this.props = props;
-            Object.entries(props).filter(([name,]) => !INVALID_PROPS_REGISTRY[name])
+            Object.entries(props).filter(([name,]) => !RESERVED_KEYWORDS[name])
                 .forEach(([name, prop]) => Object.defineProperty(this, name, prop));
         }
 
