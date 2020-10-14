@@ -41,7 +41,8 @@ export class AxesScaffolding {
             const { intersects } = axesHelper;
 
             if (!activeObject) return;
-
+            else if(intersects) axesHelper.engage();
+            
             const { x: x0, y: y0 } = scope.mouse;
             let x1 = x0, y1 = y0;
             function translate() {
@@ -86,7 +87,6 @@ export class AxesScaffolding {
             }
             const mouseListener = event => {
                 if (intersects) {
-                    axesHelper.engage();
                     const { ctrlKey, shiftKey } = event;
                     if (ctrlKey && shiftKey) {
                         scale();
@@ -105,8 +105,9 @@ export class AxesScaffolding {
     }
 
     setObject(object: Object3D) {
-        if (this.activeObject)
-            this.activeObject.remove(this.axesHelper);
+        const { activeObject } = this;
+        if(activeObject === object) return;
+        else if (activeObject) this.activeObject.remove(this.axesHelper);
         if (object) object.add(this.axesHelper);
         this.activeObject = object;
     }
