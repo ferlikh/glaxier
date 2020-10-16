@@ -15,6 +15,14 @@ export const autoExpose = (name: string, object: Settable | Function, init?: Fun
     exposable(window, name)(setter, init);
 }
 
+export const autoGet = (config: { [name: string]: any }) => {
+    Object.keys(config).filter(k => !(k in window)).forEach(key => {
+        Object.defineProperty(window, key, {
+            get: () => config[key]
+        });
+    });
+}
+
 const defaultResize = (scene: Scene) => {
     const { composer, renderer } = scene;
     const camera = scene.camera as THREE.PerspectiveCamera,
