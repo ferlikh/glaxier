@@ -21,14 +21,6 @@ export class Utils {
         return object;
     }
 
-    static stage(html) {
-        fs.writeFileSync(this.stagingFile, html);
-    }
-
-    static registerPath(path) {
-        this.registeredDirs.push(path);
-    }
-
     static lookup(file) {
         const dirs = [...this.registeredDirs, ...this.defaultDirs];
         for (const dir of dirs) {
@@ -41,6 +33,21 @@ export class Utils {
             }
         }
         return {};
+    }
+
+    static propertyParent(object: any, propertyPath: string[]) {
+        let target = object;
+        const path = propertyPath.slice(0, -1);
+        while(path.length) target = target[path.shift()];
+        return target;
+    }
+
+    static stage(html) {
+        fs.writeFileSync(this.stagingFile, html);
+    }
+
+    static registerPath(path) {
+        this.registeredDirs.push(path);
     }
 
     static runInWindow(window: BrowserWindow | Promise<BrowserWindow>, code: string) {
