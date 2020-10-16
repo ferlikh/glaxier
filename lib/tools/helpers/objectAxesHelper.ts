@@ -1,6 +1,6 @@
 import { MouseVector } from 'glaxier';
 import { AxesHelper, ArrowHelper, Vector3, Object3D } from 'three';
-import { GPUPicker } from './gpu.picker';
+import { GPUPicker } from './gpuPicker';
 
 interface IAxisIntersect {
     axis: 'x' | 'y' | 'z';
