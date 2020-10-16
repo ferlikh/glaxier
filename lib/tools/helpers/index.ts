@@ -1,2 +1,2 @@
-export * from './gpu.picker';
-export * from './object-axes.helper';
+export * from './gpuPicker';
+export * from './objectAxesHelper';
