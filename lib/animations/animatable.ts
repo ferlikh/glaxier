@@ -50,24 +50,22 @@ export class Animatable {
 
     protected interpolate() {
         const
-            prevKeyFrame = this.keyFrames[this.prevIndex].frame,
-            nextKeyFrame = this.keyFrames[this.nextIndex].frame,
-            prevValue = this.keyFrames[this.prevIndex].value,
-            nextValue = this.keyFrames[this.nextIndex].value;
+            startKeyFrame = this.keyFrames[this.prevIndex].frame,
+            endKeyFrame = this.keyFrames[this.nextIndex].frame,
+            startValue = this.keyFrames[this.prevIndex].value,
+            endValue = this.keyFrames[this.nextIndex].value;
 
-        if (this.currentFrame === prevKeyFrame || this.prevIndex > this.nextIndex) {
-            this.currentValue = prevValue;
+        if (this.currentFrame === startKeyFrame || this.prevIndex > this.nextIndex) {
+            this.currentValue = startValue;
             return;
         }
 
-        const framesPerPeriod = nextKeyFrame - prevKeyFrame;
-        const framesElapsedSinceIndex = this.currentFrame - prevKeyFrame;
-        const percentPeriodComplete = framesElapsedSinceIndex / framesPerPeriod
+        const duration = endKeyFrame - startKeyFrame;
+        const gradient = (this.currentFrame - startKeyFrame) / duration;
 
         switch (this.dataType) {
             case ANIMATIONTYPE.FLOAT:
-                const diff = (nextValue - prevValue) * percentPeriodComplete;
-                this.currentValue = prevValue + diff;
+                this.currentValue = startValue + ((endValue - startValue) * gradient);
                 break;
         }
         // console.log(this.currentFrame, this.currentValue);
