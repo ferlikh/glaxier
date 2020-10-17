@@ -12,3 +12,9 @@ export enum ANIMATIONLOOPMODE {
     RELATIVE,
     CONSTANT
 }
+
+export enum EASINGMODE {
+    EASE_IN,
+    EASE_OUT,
+    EASE_INOUT,
+}

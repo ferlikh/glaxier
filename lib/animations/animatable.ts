@@ -1,11 +1,14 @@
 import { IAnimationKey } from './animationKey';
+import { EasingFunction } from './easing';
 import { ANIMATIONTYPE, ANIMATIONLOOPMODE } from './enums';
 
 type AnimatableValue = number;
 
+// a value animated by an array of keyFrames
 export class Animatable {
     protected currentFrame: number;
     protected currentValue: AnimatableValue;
+    private easingFn: EasingFunction;
     private keyFrames: IAnimationKey[];
     private startTime: number;
     private prevIndex: number;
@@ -25,6 +28,14 @@ export class Animatable {
         this.keyFrames = keys;
         this.endIndex = this.keyFrames.length - 1;
         this.frameLimit = this.keyFrames[this.endIndex].frame + 1;
+    }
+
+    getEasing() {
+        return this.easingFn;
+    }
+
+    setEasing(easingFn: EasingFunction) {
+        this.easingFn = easingFn;
     }
 
     play() {
@@ -61,7 +72,11 @@ export class Animatable {
         }
 
         const duration = endKeyFrame - startKeyFrame;
-        const gradient = (this.currentFrame - startKeyFrame) / duration;
+        let gradient = (this.currentFrame - startKeyFrame) / duration;
+
+        if(this.easingFn) {
+            gradient = this.easingFn.ease(gradient);
+        }
 
         switch (this.dataType) {
             case ANIMATIONTYPE.FLOAT:
