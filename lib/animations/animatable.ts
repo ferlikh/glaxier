@@ -61,18 +61,18 @@ export class Animatable {
 
     protected interpolate() {
         const
-            startKeyFrame = this.keyFrames[this.prevIndex].frame,
-            endKeyFrame = this.keyFrames[this.nextIndex].frame,
+            startFrame = this.keyFrames[this.prevIndex].frame,
+            endFrame = this.keyFrames[this.nextIndex].frame,
             startValue = this.keyFrames[this.prevIndex].value,
             endValue = this.keyFrames[this.nextIndex].value;
 
-        if (this.currentFrame === startKeyFrame || this.prevIndex > this.nextIndex) {
+        if (this.currentFrame === startFrame || this.prevIndex > this.nextIndex) {
             this.currentValue = startValue;
             return;
         }
 
-        const duration = endKeyFrame - startKeyFrame;
-        let gradient = (this.currentFrame - startKeyFrame) / duration;
+        const duration = endFrame - startFrame;
+        let gradient = (this.currentFrame - startFrame) / duration;
 
         if(this.easingFn) {
             gradient = this.easingFn.ease(gradient);
