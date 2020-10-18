@@ -1,5 +1,5 @@
 import { IAnimationKey } from './animationKey';
-import { EasingFunction } from './easing';
+import { IEasingFunction } from './easing';
 import { ANIMATIONTYPE, ANIMATIONLOOPMODE } from './enums';
 
 type AnimatableValue = number;
@@ -8,7 +8,7 @@ type AnimatableValue = number;
 export class Animatable {
     protected currentFrame: number;
     protected currentValue: AnimatableValue;
-    private easingFn: EasingFunction;
+    private easingFn: IEasingFunction;
     private keyFrames: IAnimationKey[];
     private startTime: number;
     private prevIndex: number;
@@ -34,7 +34,7 @@ export class Animatable {
         return this.easingFn;
     }
 
-    setEasing(easingFn: EasingFunction) {
+    setEasing(easingFn: IEasingFunction) {
         this.easingFn = easingFn;
     }
 
