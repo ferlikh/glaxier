@@ -89,12 +89,12 @@ export class Animatable {
     private progress() {
         if (!this.running) return;
         const framesElapsed = Math.round((Date.now() - this.startTime) * this.fps / 1000);
-
+        const currentFrame = framesElapsed % this.frameLimit;
         // frame hasn't changed
-        if(framesElapsed % this.frameLimit === this.currentFrame)
+        if(currentFrame === this.currentFrame)
             return Animatable.requestAnimationFrame.call(window, this.progress.bind(this));
 
-        this.currentFrame = framesElapsed % this.frameLimit;
+        this.currentFrame = currentFrame;
         // next key frame was hit
         if (this.currentFrame > this.keyFrames[this.nextIndex].frame) {
             this.prevIndex = this.nextIndex;
