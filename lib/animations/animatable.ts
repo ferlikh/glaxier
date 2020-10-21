@@ -1,8 +1,8 @@
+import { IVector2, Vectors } from 'glaxier/tools';
+import { AnimatableValue } from './animatableValue';
 import { IAnimationKey } from './animationKey';
 import { IEasingFunction } from './easing';
 import { ANIMATIONTYPE, ANIMATIONLOOPMODE } from './enums';
-
-type AnimatableValue = number;
 
 // a value animated by an array of keyFrames
 export class Animatable {
@@ -62,7 +62,8 @@ export class Animatable {
     protected interpolate() {
         const
             startFrame = this.keyFrames[this.prevIndex].frame,
-            endFrame = this.keyFrames[this.nextIndex].frame,
+            endFrame = this.keyFrames[this.nextIndex].frame;
+        let
             startValue = this.keyFrames[this.prevIndex].value,
             endValue = this.keyFrames[this.nextIndex].value;
 
@@ -80,7 +81,12 @@ export class Animatable {
 
         switch (this.dataType) {
             case ANIMATIONTYPE.FLOAT:
+                startValue = startValue as number;
+                endValue = endValue as number;
                 this.currentValue = startValue + ((endValue - startValue) * gradient);
+                break;
+            case ANIMATIONTYPE.VECTOR2:
+                this.currentValue = Vectors.lerp2(startValue as IVector2, endValue as IVector2, gradient);
                 break;
         }
         // console.log(this.currentFrame, this.currentValue);

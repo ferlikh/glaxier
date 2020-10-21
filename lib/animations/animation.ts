@@ -21,32 +21,37 @@ export class Animation extends Animatable {
     }
 
     interpolate() {
-        const previousValue = this.currentValue;
+        // const previousValue = this.currentValue;
         super.interpolate();
-        this.callback(previousValue, this.currentValue);
+        this.callback(this.currentValue);
     }
 
     runEveryFrame(callback: Function) {
         this.callback = callback;
     }
 
-    static targetedInterpolation(target, property, dataType, prev, curr) {
+    static targetedInterpolation(target, property, dataType, value) {
         switch(dataType) {
             case ANIMATIONTYPE.FLOAT:
                 // const delta = curr - prev;
                 // target[property] += delta;
-                target[property] = curr;
+                target[property] = value;
+                break;
+            case ANIMATIONTYPE.VECTOR2:
+                target[property].x = value.x;
+                target[property].y = value.y;
                 break;
         }
     }
 
     static interpolator(object, property, dataType) {
+        const targetPropertyPath = property.split('.');
+        const target = Utils.propertyParent(object, targetPropertyPath);
+        const targetProperty = targetPropertyPath[targetPropertyPath.length - 1];
         switch(dataType) {
             case ANIMATIONTYPE.FLOAT:
-                const targetPropertyPath = property.split('.');
-                const target = Utils.propertyParent(object, targetPropertyPath);
-                const targetProperty = targetPropertyPath[targetPropertyPath.length - 1];
-                return (prev, curr) => Animation.targetedInterpolation(target, targetProperty, dataType, prev, curr);
+            case ANIMATIONTYPE.VECTOR2:
+                return value => Animation.targetedInterpolation(target, targetProperty, dataType, value);
             default:
                 return () => {}
         }
