@@ -4,6 +4,11 @@
 
 import { Vector2, Vector3 } from 'three';
 
+export interface IVector2 {
+    x: number;
+    y: number;
+}
+
 export class Vectors {
     static distance(u: Vector2, v: Vector2, basis?: Vector2) {
         const 
@@ -13,6 +18,12 @@ export class Vectors {
 
         return Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2))
             * Vectors.sign(basis, new Vector2(dX, dY));
+    }
+
+    static lerp2(start: IVector2, end: IVector2, amount: number) {
+        const x = start.x + ((end.x - start.x) * amount);
+        const y = start.y + ((end.y - start.y) * amount);
+        return new Vector2(x, y);
     }
 
     static sign(src, dest) {
