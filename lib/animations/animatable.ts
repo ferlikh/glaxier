@@ -1,4 +1,4 @@
-import { IVector2, Vectors } from 'glaxier/tools';
+import { IVector2, IVector3, Vectors } from 'glaxier/tools';
 import { AnimatableValue } from './animatableValue';
 import { IAnimationKey } from './animationKey';
 import { IEasingFunction } from './easing';
@@ -87,6 +87,9 @@ export class Animatable {
                 break;
             case ANIMATIONTYPE.VECTOR2:
                 this.currentValue = Vectors.lerp2(startValue as IVector2, endValue as IVector2, gradient);
+                break;
+            case ANIMATIONTYPE.VECTOR3:
+                this.currentValue = Vectors.lerp3(startValue as IVector3, endValue as IVector3, gradient);
                 break;
         }
         // console.log(this.currentFrame, this.currentValue);

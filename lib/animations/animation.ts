@@ -41,6 +41,11 @@ export class Animation extends Animatable {
                 target[property].x = value.x;
                 target[property].y = value.y;
                 break;
+            case ANIMATIONTYPE.VECTOR3:
+                target[property].x = value.x;
+                target[property].y = value.y;
+                target[property].z = value.z;
+                break;
         }
     }
 
@@ -51,6 +56,7 @@ export class Animation extends Animatable {
         switch(dataType) {
             case ANIMATIONTYPE.FLOAT:
             case ANIMATIONTYPE.VECTOR2:
+            case ANIMATIONTYPE.VECTOR3:
                 return value => Animation.targetedInterpolation(target, targetProperty, dataType, value);
             default:
                 return () => {}
