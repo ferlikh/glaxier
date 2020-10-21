@@ -9,6 +9,12 @@ export interface IVector2 {
     y: number;
 }
 
+export interface IVector3 {
+    x: number;
+    y: number;
+    z: number;
+}
+
 export class Vectors {
     static distance(u: Vector2, v: Vector2, basis?: Vector2) {
         const 
@@ -24,6 +30,13 @@ export class Vectors {
         const x = start.x + ((end.x - start.x) * amount);
         const y = start.y + ((end.y - start.y) * amount);
         return new Vector2(x, y);
+    }
+
+    static lerp3(start: IVector3, end: IVector3, amount: number) {
+        const x = start.x + ((end.x - start.x) * amount);
+        const y = start.y + ((end.y - start.y) * amount);
+        const z = start.z + ((end.z - start.z) * amount);
+        return new Vector3(x, y, z);
     }
 
     static sign(src, dest) {
