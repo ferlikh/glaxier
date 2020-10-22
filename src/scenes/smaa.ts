@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Stats  } from 'glaxier/renderer';
+import { Stats } from 'glaxier/renderer';
 import { autoResize, Meshes, SMAAPass } from 'glaxier';
 
 export function render() {
