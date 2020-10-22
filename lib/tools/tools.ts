@@ -15,7 +15,9 @@ export class Tools {
             return {...object};
         }
     }
-    static renderer(renderer = new THREE.WebGLRenderer) {
+    static renderer(config?: THREE.WebGLRenderer | THREE.WebGLRendererParameters) {
+        const renderer = config && config instanceof THREE.WebGLRenderer? 
+                config: new THREE.WebGLRenderer(config ?? {});
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(window.innerWidth, window.innerHeight);
         return renderer;
