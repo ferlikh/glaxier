@@ -6,6 +6,9 @@ export { VRButton } from 'three/examples/jsm/webxr/VRButton';
 // controls
 export { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
+// helpers
+export { VertexNormalsHelper } from 'three/examples/jsm/helpers/VertexNormalsHelper';
+
 // postprocessing (passes + composers)
 export { Pass } from 'three/examples/jsm/postprocessing/Pass';
 export { ClearPass } from 'three/examples/jsm/postprocessing/ClearPass';
