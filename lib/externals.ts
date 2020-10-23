@@ -4,10 +4,14 @@
 export { VRButton } from 'three/examples/jsm/webxr/VRButton';
 
 // controls
+export { FirstPersonControls } from 'three/examples/jsm/controls/FirstPersonControls';
 export { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 // helpers
 export { VertexNormalsHelper } from 'three/examples/jsm/helpers/VertexNormalsHelper';
+
+// noise
+export { ImprovedNoise } from 'three/examples/jsm/math/ImprovedNoise';
 
 // postprocessing (passes + composers)
 export { Pass } from 'three/examples/jsm/postprocessing/Pass';
@@ -29,3 +33,6 @@ export { DotScreenShader } from 'three/examples/jsm/shaders/DotScreenShader';
 export { LuminosityShader } from 'three/examples/jsm/shaders/LuminosityShader';
 export { RGBShiftShader } from 'three/examples/jsm/shaders/RGBShiftShader';
 export { SobelOperatorShader } from 'three/examples/jsm/shaders/SobelOperatorShader';
+
+// utils
+export { BufferGeometryUtils } from 'three/examples/jsm/utils/BufferGeometryUtils';
