@@ -5,7 +5,4 @@ import StatsModule from 'three/examples/jsm/libs/stats.module';
 
 export { GUI } from 'three/examples/jsm/libs/dat.gui.module';
 
-const Stats = (StatsModule as VoidFunction);
-export {
-    Stats
-}
+export const Stats = (StatsModule as VoidFunction);
