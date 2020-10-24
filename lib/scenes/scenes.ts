@@ -13,29 +13,16 @@ export default class Scenes {
         return object.__scn__ === this.sceneKey;
     }
 
-    static create(object: SceneObject | CompositeSceneOptions | MultiSceneOptions) {
-        const isScene = Scenes.isScene(object);
-        if (isScene) return object;
+    static create(object: SceneObject | CompositeSceneOptions | MultiSceneOptions): Scene {
+        if (Scenes.isScene(object)) return object;
         // scene options
-        else if('loops' in object) {
+        else if ('loops' in object) {
             return new CompositeScene(object);
         }
-        else if('scenes' in object) {
+        else if ('scenes' in object) {
             return new MultiScene(object);
         }
         return new Scene(object as SceneOptions);
-    }
-
-    static lookup(scene) {
-        const ext = path.extname(scene);
-        let fileName = scene;
-
-        if (!ext) fileName += '.js';
-        else if (ext !== '.js') {
-            throw new TypeError('scene function only expects .js files, please try another method');
-        }
-
-        return Utils.lookup(fileName);
     }
 
     static compose(...scenes) {
@@ -62,36 +49,68 @@ export default class Scenes {
         });
     }
 
-    static run(transform: string, scene: string | BrowserWindow | Promise<BrowserWindow>, window?: BrowserWindow) {
-        if(scene instanceof BrowserWindow || scene instanceof Promise) {
-            const code = `$scene = Scenes.reassemble($scene, '${transform}').attach(); (void 0)`;
-            return Utils.runInWindow(scene, code);
+    static lookup(scene) {
+        const ext = path.extname(scene);
+        let fileName = scene;
+
+        if (!ext) fileName += '.js';
+        else if (ext !== '.js') {
+            throw new TypeError('scene function only expects .js files, please try another method');
         }
-        else {
-            const { scriptSrc } = Scenes.lookup(scene);
-            if(!scriptSrc) {
-                console.error(`${scene} not found`);
-                return;
-            }
-            Utils.stage( Scenes.template(transform, scriptSrc) );
-            return WindowManager.load(scene, window);
-        }
+
+        return Utils.lookup(fileName);
+    }
+
+    static modification(name, scene) {
+        const src = Scenes.search(scene);
+        Utils.stage(
+            Scenes.template(`Scenes.mod('${name}')`, src)
+        );
+        return WindowManager.open({ name: scene, src: Utils.stagingFile });
     }
 
     static orbit(scene: SceneObject) {
         return Scenes.augment(scene, { controls: true });
     }
 
+    static run(transform: string, scene: string | BrowserWindow | Promise<BrowserWindow>, window?: BrowserWindow) {
+        if (scene instanceof BrowserWindow || scene instanceof Promise) {
+            const code = `$scene = Scenes.reassemble($scene, '${transform}').attach(); (void 0)`;
+            return Utils.runInWindow(scene, code);
+        }
+        else {
+            const { scriptSrc } = Scenes.lookup(scene);
+            if (!scriptSrc) {
+                console.error(`${scene} not found`);
+                return;
+            }
+            Utils.stage(Scenes.template(transform, scriptSrc));
+            return WindowManager.load(scene, window);
+        }
+    }
+
+    static search(name: string) {
+        const { scriptSrc } = Scenes.lookup(name);
+        if (!scriptSrc) {
+            throw new Error(`${name} not found`);
+        }
+        return scriptSrc;
+    }
+
+    static template(transform, src) {
+        return sceneTemplate(src, `$scene = ${transform}(render()).attach();`);
+    }
+
     static toComposite(scene: SceneObject | CompositeSceneObject) {
-        if('loops' in scene) return new CompositeScene(scene);
+        if ('loops' in scene) return new CompositeScene(scene);
         else if ('options' in scene && 'loops' in scene.options) return scene;
 
         const { camera, loop, setup } = scene;
         const loops = [loop];
-        const setups = setup? [setup]: [];
-        const effects = scene.effects? [...scene.effects]: [];
-        const objects = scene.objects? [...scene.objects]: [];
-        const options = Scenes.isScene(scene)? scene.options: scene;
+        const setups = setup ? [setup] : [];
+        const effects = scene.effects ? [...scene.effects] : [];
+        const objects = scene.objects ? [...scene.objects] : [];
+        const options = Scenes.isScene(scene) ? scene.options : scene;
         return new CompositeScene({
             ...options,
             camera, effects, objects, loops, setups,
@@ -99,7 +118,7 @@ export default class Scenes {
     }
 
     private static augment(scene: SceneObject, options: SceneOptions) {
-        return Scenes.create({ ...(Scenes.isScene(scene)? scene.options: scene), ...options });
+        return Scenes.create({ ...(Scenes.isScene(scene) ? scene.options : scene), ...options });
     }
 
     private static compile(scenes): SceneObject[] {
@@ -107,14 +126,26 @@ export default class Scenes {
         return eval("[" + sources.map(source => `require('${source}').render()`).join(', ') + "]");
     }
 
-    private static reassemble(scene: Scene, transform: string) {
-        if(!transform.match(/^\w+\.\w+$/)) return;
-        const options = scene.detach();
-        return eval(transform)({ ...options, setup: undefined, setups: [] });
+    private static mod(name) {
+        return function (scene) {
+            const { loop, setup } = scene;
+            const options = eval(`require('./renderer/${name}')`);
+            if(!options) throw new Error(`${name} modification not found`);
+            const { loop: modLoop, setup: modSetup } = options;
+            if (modLoop) options.loop = function () {
+                modLoop.call(this, loop);
+            }
+            if (modSetup) options.setup = function () {
+                modSetup.call(this, setup);
+            }
+            return Scenes.augment(scene, options);
+        };
     }
 
-    private static template(transform, src) {
-        return sceneTemplate(src, `$scene = ${transform}(render()).attach();`);
+    private static reassemble(scene: Scene, transform: string) {
+        if (!transform.match(/^\w+\.\w+$/)) return;
+        const options = scene.detach();
+        return eval(transform)({ ...options, setup: undefined, setups: [] });
     }
 }
 
