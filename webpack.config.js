@@ -29,7 +29,7 @@ function globFolder(dir) {
             rules: [
                 {
                     test: /\.(ts|tsx)$/,
-                    include: [path.resolve('./lib/renderer'), path.resolve(dir)],
+                    include: [path.resolve('./lib'), path.resolve(dir)],
                     loader: 'ts-loader',
                 },
             ],
@@ -48,6 +48,47 @@ function globFolder(dir) {
 
 function globFolders(dirs) {
     return dirs.map(dir => globFolder(dir));
+}
+
+function globRenders() {
+    const rendererFiles = glob.sync('./lib/renderer/*').filter(s => !s.match(/(index|renderer)\.ts/));
+    const entry = Object.fromEntries(
+        rendererFiles.map(file => [path.parse(file).name, file])
+    );
+    return {
+        resolve: {
+            extensions: ['.ts', '.tsx', '.js'],
+            modules: ['node_modules'],
+            alias: {
+                'glaxier': path.resolve('lib'),
+            }
+        },
+        devtool: 'inline-source-map',
+        entry,
+        target: 'electron-renderer',
+        node: {
+            __dirname: true,
+            __filename: false
+        },
+        module: {
+            rules: [
+                {
+                    test: /\.(ts|tsx)$/,
+                    include: [path.resolve('./lib')],
+                    loader: 'ts-loader',
+                },
+            ],
+        },
+        externals: {
+            glaxier: 'global'
+        },
+        output: {
+            path: path.resolve('dist'),
+            filename: `renderer/[name].js`,
+            libraryTarget: 'global',
+            globalObject: 'this',
+        },
+    };
 }
 
 module.exports = [
@@ -205,5 +246,42 @@ module.exports = [
             globalObject: 'this',
         },
     },
+    // {
+    //     resolve: {
+    //         extensions: ['.ts', '.tsx', '.js'],
+    //         modules: ['node_modules'],
+    //         alias: {
+    //             'glaxier': path.resolve('lib'),
+    //         }
+    //     },
+    //     devtool: 'inline-source-map',
+    //     entry: {
+    //         'strictly-4-my-renders': path.resolve('./lib/renderer'),
+    //     },
+    //     target: 'electron-renderer',
+    //     node: {
+    //         __dirname: true,
+    //         __filename: false
+    //     },
+    //     module: {
+    //         rules: [
+    //             {
+    //                 test: /\.(ts|tsx)$/,
+    //                 include: [path.resolve('./lib')],
+    //                 loader: 'ts-loader',
+    //             },
+    //         ],
+    //     },
+    //     externals: {
+    //         'glaxier': 'global',
+    //     },
+    //     output: {
+    //         path: path.resolve('dist'),
+    //         filename: '[name].js',
+    //         libraryTarget: 'global',
+    //         globalObject: 'this',
+    //     },
+    // },
+    globRenders(),
     ...globFolders(glob.sync('./src/scenes/*/'))
 ]
