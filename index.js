@@ -1,4 +1,4 @@
-const { spawn, exec, fork } = require('child_process');
+const { spawn, fork } = require('child_process');
 
 let repl;
 const electron = spawn(require('electron'), ['./dist/main.js'], {
