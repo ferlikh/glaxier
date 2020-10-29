@@ -1,3 +1,3 @@
-import { IVector2 } from "glaxier/tools";
+import { IVector2, IVector3 } from "glaxier/tools";
 
-export type AnimatableValue = number | IVector2;
+export type AnimatableValue = number | IVector2 | IVector3;
