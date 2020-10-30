@@ -32,19 +32,20 @@ export function render() {
     const stats = new Stats();
     document.body.appendChild(stats.dom);
 
-    const renderer = Tools.renderer({ antialias: false });
+    const renderer = Tools.renderer({ antialias: true });
 
     const controls = new FirstPersonControls(camera, renderer.domElement);
 
     controls.movementSpeed = 500;
     controls.lookSpeed = 0.1;
 
+    const mesh = new THREE.Mesh(geometry, material);
 
     return {
-        controls,
         camera,
-        objects: [new THREE.Mesh(geometry, material)],
-        
+        controls,
+        objects: [mesh],
+        renderer,
         setup: function() {
             const { scene } = this;
             scene.background = new THREE.Color(0xaaccff);
@@ -56,7 +57,6 @@ export function render() {
 
                 renderer.setSize(window.innerWidth, window.innerHeight);
 
-                controls.handleResize();
             })
         },
         loop: function () {
