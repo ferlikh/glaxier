@@ -92,6 +92,7 @@ function globRenders() {
 }
 
 module.exports = [
+    // main lib
     {
         resolve: {
             extensions: ['.ts', '.tsx', '.js'],
@@ -130,6 +131,7 @@ module.exports = [
             globalObject: 'this'
         },
     },
+    // main entry
     {
         resolve: {
             extensions: ['.ts', '.tsx', '.js'],
@@ -192,6 +194,7 @@ module.exports = [
             }),
         ]
     },
+    // renderer lib
     {
         resolve: {
             extensions: ['.ts', '.tsx', '.js'],
@@ -203,6 +206,44 @@ module.exports = [
         devtool: 'inline-source-map',
         entry: {
             'renderer-lib': path.resolve('./lib'),
+        },
+        target: 'electron-renderer',
+        node: {
+            __dirname: true,
+            __filename: false
+        },
+        module: {
+            rules: [
+                {
+                    test: /\.tsx?$/,
+                    include: [path.resolve('./lib')],
+                    use: 'ts-loader'
+                },
+            ],
+        },
+        externals: {
+            'glaxier': 'global',
+        },
+        output: {
+            path: path.resolve('dist'),
+            filename: '[name].js',
+            libraryTarget: 'global',
+            globalObject: 'this',
+        },
+    },
+    globRenders(),
+
+    // examples
+    {
+        resolve: {
+            extensions: ['.ts', '.tsx', '.js'],
+            modules: ['node_modules'],
+            alias: {
+                'glaxier': path.resolve('lib'),
+            }
+        },
+        devtool: 'inline-source-map',
+        entry: {
             ...globFiles('./src/scenes/*.ts'),
         },
         target: 'electron-renderer',
@@ -213,8 +254,8 @@ module.exports = [
         module: {
             rules: [
                 {
-                    test: /\.(ts|tsx)$/,
-                    include: [path.resolve('./lib'), path.resolve('./src/scenes/*.ts')],
+                    test: /\.tsx?$/,
+                    include: [path.resolve('./lib'), path.resolve('./src/scenes')],
                     loader: 'ts-loader',
                 },
             ],
@@ -238,50 +279,12 @@ module.exports = [
         output: {
             path: path.resolve('dist'),
             filename: (pathData) => {
-                const sceneDir = path.resolve('./src/scenes');
-                const isScene = pathData.chunk.entryModule.context === sceneDir;
+                const isScene = pathData.chunk.entryModule.context === path.resolve('./src/scenes');
                 return isScene ? 'scenes/[name].js' : '[name].js';
             },
             libraryTarget: 'global',
             globalObject: 'this',
         },
     },
-    // {
-    //     resolve: {
-    //         extensions: ['.ts', '.tsx', '.js'],
-    //         modules: ['node_modules'],
-    //         alias: {
-    //             'glaxier': path.resolve('lib'),
-    //         }
-    //     },
-    //     devtool: 'inline-source-map',
-    //     entry: {
-    //         'strictly-4-my-renders': path.resolve('./lib/renderer'),
-    //     },
-    //     target: 'electron-renderer',
-    //     node: {
-    //         __dirname: true,
-    //         __filename: false
-    //     },
-    //     module: {
-    //         rules: [
-    //             {
-    //                 test: /\.(ts|tsx)$/,
-    //                 include: [path.resolve('./lib')],
-    //                 loader: 'ts-loader',
-    //             },
-    //         ],
-    //     },
-    //     externals: {
-    //         'glaxier': 'global',
-    //     },
-    //     output: {
-    //         path: path.resolve('dist'),
-    //         filename: '[name].js',
-    //         libraryTarget: 'global',
-    //         globalObject: 'this',
-    //     },
-    // },
-    globRenders(),
     ...globFolders(glob.sync('./src/scenes/*/'))
 ]
