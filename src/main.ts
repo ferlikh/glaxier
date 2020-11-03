@@ -40,6 +40,7 @@ app.on('window-all-closed', (e) => {
     // console.log('window-all-closed', e)
 });
 
+// look for scenes in this path
 Utils.registerPath('dist/html');
 
 const context = {
