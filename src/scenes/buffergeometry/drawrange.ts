@@ -132,9 +132,10 @@ export function render() {
     linesMesh = new THREE.LineSegments( geometry, material );
     group.add( linesMesh );
 
-    const renderer = Tools.renderer({ antialias: true, outputEncoding: THREE.sRGBEncoding });
+    const renderer = Tools.renderer({ antialias: true });
+    renderer.outputEncoding = THREE.sRGBEncoding;
     const stats = new Stats();
-    
+
     return {
         camera,
         container,
