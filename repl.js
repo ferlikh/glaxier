@@ -50,6 +50,7 @@ function parseFn(data, alias) {
     const args = data.replace(/(?:function)?\s*(?:.*?)\((.*?)\)\s*\{(?:.|\s)*\}$/, '$1').split(',').filter(a => a);
     const body = data.toString().replace(/(?:function)?\s*(?:.*?)?\((?:(?:.|\s)*?)\)\s*\{\s*((?:.|\s)*)\s*\}$/, '$1');
     // console.log({ name, args, body })
+    if(body.includes('[native code]')) return vm.runInThisContext(name);
     const fn = new Function(...args, body);
     Object.defineProperty(fn, 'name', { value: name });
     return fn;
