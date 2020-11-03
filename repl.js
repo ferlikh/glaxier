@@ -15,9 +15,18 @@ async function eval(cmd, context, filename, cb) {
         process.send(cmd, null, {}, err => {
             if (err) reject(err);
             process.once('message', msg => {
-                let data = msg.err ? undefined : msg.data;
-                if (msg.fn) {
-                    data = parseFn(data, cmd.trim());
+                let data;
+                if(msg.err) {
+                    data = msg.err;
+                }
+                else if(msg.log) {
+                    console.log(...msg.params);
+                }
+                else if (msg.fn) {
+                    data = parseFn(msg.data, cmd.trim());
+                }
+                else {
+                    data = msg.data;
                 }
                 resolve(cb(null, data));
             });
@@ -50,7 +59,7 @@ function parseFn(data, alias) {
     const args = data.replace(/(?:function)?\s*(?:.*?)\((.*?)\)\s*\{(?:.|\s)*\}$/, '$1').split(',').filter(a => a);
     const body = data.toString().replace(/(?:function)?\s*(?:.*?)?\((?:(?:.|\s)*?)\)\s*\{\s*((?:.|\s)*)\s*\}$/, '$1');
     // console.log({ name, args, body })
-    if(body.includes('[native code]')) return vm.runInThisContext(name);
+    if(body.includes('[native code]')) return vm.runInThisContext(name); // allow evaluation of native fns
     const fn = new Function(...args, body);
     Object.defineProperty(fn, 'name', { value: name });
     return fn;

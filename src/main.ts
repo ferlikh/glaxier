@@ -43,8 +43,22 @@ app.on('window-all-closed', (e) => {
 // look for scenes in this path
 Utils.registerPath('dist/html');
 
+const logProxy = new Proxy(console.log, {
+    apply(target, thisArg, params) {
+        process.send({ log: true, params })
+    }
+});
+
 const context = {
     ...lib,
+    console: new Proxy(console, {
+        get(target, prop) {
+            switch(prop) {
+                case 'log': return logProxy;
+                default: return target[prop]
+            }
+        }
+    }),
     $winman: Object.defineProperties({}, {
         windows: {
             enumerable: true,
