@@ -51,7 +51,7 @@ function globFolders(dirs) {
 }
 
 function globRenders() {
-    const rendererFiles = glob.sync('./lib/renderer/*').filter(s => !s.match(/(index|renderer)\.ts/));
+    const rendererFiles = glob.sync('./lib/renderer/*.ts').filter(s => !s.match(/(index|renderer)\.ts/));
     const entry = Object.fromEntries(
         rendererFiles.map(file => [path.parse(file).name, file])
     );
