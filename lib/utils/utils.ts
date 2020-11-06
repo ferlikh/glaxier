@@ -21,6 +21,16 @@ export class Utils {
         return object;
     }
 
+    static download(blob, ext) {
+        const title = document.title ? document.title : 'scene';
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = title + ext;
+        a.click();
+        window.URL.revokeObjectURL(url);
+    }
+
     static lookup(file) {
         const dirs = [...this.registeredDirs, ...this.defaultDirs];
         for (const dir of dirs) {
